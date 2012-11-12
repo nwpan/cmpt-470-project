@@ -1,5 +1,7 @@
 App::Application.routes.draw do
 
+  resources :items
+
   get "users/new"
 
   get "model_handler/index"
