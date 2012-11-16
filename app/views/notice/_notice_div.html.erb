@@ -1,0 +1,15 @@
+
+<%- flash.each do |key, msg| -%>
+  <%= javascript_tag do %>
+  jQuery(function($) {
+    $("#<%= key %>.flash").click(function() {
+      $("#<%= key %>.flash").fadeOut("fast");
+    });
+  });
+  <% end %>
+  <div class="flash" id="<%= key %>">
+    <p class="close" id="<%= key %> style="float:right;">X</p>
+    <p><%= msg %></p>
+    <div class="clear"></div>
+  </div>
+<%- end -%>
