@@ -16,8 +16,9 @@ class UsersController < ApplicationController
     if @user.save
       sign_in @user
       flash[:success] = "Welcome to the Sample App!"
-      redirect_to @user
+      redirect_to :root
     else
+      flash[:error] = "Something is wrong with your input."
       render 'new'
     end
   end
