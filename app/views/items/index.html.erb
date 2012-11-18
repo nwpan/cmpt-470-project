@@ -1,27 +1,25 @@
-<h1>Listing items</h1>
+<h1>Store</h1>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Item type</th>
-    <th>Price</th>
-    <th>Image url</th>
-    <th>Description</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<table class="store">
 
 <% @items.each do |item| %>
   <tr>
-    <td><%= item.name %></td>
-    <td><%= item.item_type %></td>
-    <td><%= item.price %></td>
-    <td><%= item.image_url %></td>
-    <td><%= item.description %></td>
-    <td><%= link_to 'Show', item %></td>
-    <td><%= link_to 'Edit', edit_item_path(item) %></td>
-    <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td>
+	<div class="image">
+	<%= link_to (image_tag item.image_url), item %>
+	</div>
+    </td>
+    <td><%= item.name %><br> Type: <%= item.item_type %><br>Price: <%= item.price %><br><%= item.description %></td>
+    <td>
+	<div class="links">
+	    <% if session[:login] == 1 %>
+		<%= link_to 'Edit', edit_item_path(item) %> |
+	    	<%= link_to 'Destroy', item, method: :delete, data: 			{ confirm: 'Are you sure?' } %>
+	    <% else %>
+		<%= link_to "Buy", item %>
+	    <% end %>
+	</div>
+    </td>
   </tr>
 <% end %>
 </table>
