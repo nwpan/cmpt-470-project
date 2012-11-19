@@ -127,6 +127,15 @@ GameObject.prototype.setTexture = function(image_path) {
     diffuseSampler: tdl.textures.loadTexture(image_path)};
     this.model.textures = textures;
 };
+
+GameObject.prototype.drawPrep = function() {
+  this.model.drawPrep();
+  for (var i = this.model.animations.length - 1; i >= 0; i--) {
+    for (var j = this.model.animations[i].frames.length - 1; j >= 0; j--) {
+      this.model.animations[i].frames[j].drawPrep();
+    };
+  };
+};
   
 GameObject.prototype.draw = function() {
   if(this.animations.length) {
@@ -138,11 +147,14 @@ GameObject.prototype.draw = function() {
   tdl.fast.matrix4.rotateZ(this.transform, tdl.math.degToRad(this.rotateZ));
   tdl.fast.matrix4.scale(this.transform, [this.width, this.height, this.depth]);
   tdl.fast.matrix4.setTranslation(this.transform, [this.x, this.y, this.z]);
+  var mvp = new Float32Array(16);
+  tdl.fast.matrix4.mul(mvp, this.transform, view);
+  tdl.fast.matrix4.mul(mvp, mvp, projection);
   var transformInv = new Float32Array(16);
   tdl.fast.transpose4(transformInv, this.transform)
   tdl.fast.inverse4(transformInv, transformInv)
   this.model.drawPrep();
-  this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "view": view, "projection": projection});
+  this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp});
 
   if(this.renderBounds) {
     var cube = tdl.primitives.createCube(1.0);
@@ -152,10 +164,13 @@ GameObject.prototype.draw = function() {
     tdl.fast.identity4(boxTransform);
     tdl.fast.matrix4.scale(boxTransform, [this.boundWidth, this.boundHeight, this.boundDepth]);
     tdl.fast.matrix4.setTranslation(boxTransform, [this.x, this.y, this.z]);
+    var mvp = new Float32Array(16);
+    tdl.fast.matrix4.mul(mvp, boxTransform, view);
+    tdl.fast.matrix4.mul(mvp, mvp, projection);
     var boxTransformInv = new Float32Array(16);
     tdl.fast.inverse4(boxTransformInv, boxTransform)
     boundingBox.drawPrep();
-    boundingBox.draw({"transform": boxTransform, "transformInv": boxTransformInv, "color": this.color, "view": view, "projection": projection});
+    boundingBox.draw({"transform": boxTransform, "transformInv": boxTransformInv, "color": this.color, "mvp": mvp});
   }
 
 };
@@ -211,6 +226,9 @@ function initRenderer() {
 
 function setScene(scene) {
   sceneToRender = scene;
+  // for (var i = sceneToRender.objects.length - 1; i >= 0; i--) {
+  //   sceneToRender.objects[i].drawPrep();
+  // };
 }
 
 function render() {
