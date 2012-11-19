@@ -1,5 +1,17 @@
 <h1>Store</h1>
 
+<div id = "wrap">
+<div class = "store_sidebar">
+	View:
+	<ul>
+	   <li>Everything</li>
+	   <% @items.each do |item| %>
+		<li> <%= item.item_type %> </li>
+	   <% end %>
+	</ul>
+</div>
+
+
 <table class="store">
 
 <% @items.each do |item| %>
@@ -23,8 +35,9 @@
   </tr>
 <% end %>
 </table>
-
+</div>
 <br />
+
 
 <% if session[:login] == 1 %>
 	<%= link_to 'New Item', new_item_path %>
