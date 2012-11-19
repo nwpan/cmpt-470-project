@@ -26,4 +26,6 @@
 
 <br />
 
-<%= link_to 'New Item', new_item_path %>
+<% if session[:login] == 1 %>
+	<%= link_to 'New Item', new_item_path %>
+<% end %>
