@@ -4,3 +4,4 @@ Welcome, <%= @user.first_name %>!<br />
 First Name: <%= @user.first_name %><br />
 Last Name: <%= @user.last_name %><br />
 Email: <%= @user.email %><br />
+Balance: <%= number_to_currency(@user.balance) %><br />

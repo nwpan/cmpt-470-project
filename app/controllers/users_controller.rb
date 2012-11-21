@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    #@user.update_column(:balance, @user.balance + 50.69)
   end
 
   def new
