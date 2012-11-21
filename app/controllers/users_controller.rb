@@ -14,11 +14,15 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
-      sign_in @user
-      flash[:success] = "Welcome to the Sample App!"
-      redirect_to @user
+        sign_in @user
+        redirect_to :root, :notice => "Hello -- we've noticed this is your first time logging into MeGL, please use the navigation menu on the top to get around."
     else
-      render 'new'
+        error = ""
+        @user.errors.full_messages.each do |message|
+            error << "Error: " << message << "<br />"
+        end
+        flash.now[:error] = error.html_safe
+        render 'new', :layout => 'application_login'
     end
   end
 end
