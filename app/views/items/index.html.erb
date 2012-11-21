@@ -4,10 +4,11 @@
 <div class = "store_sidebar">
 	View:
 	<ul>
-	   <li>Everything</li>
-	   <% @items.each do |item| %>
-		<li> <%= item.item_type %> </li>
-	   <% end %>
+	   <li><%= link_to 'Everything', "#" %></li>
+	   <li><%= link_to 'Hats', "#" %></li>
+	   <li><%= link_to 'Tops', "#" %></li>
+	   <li><%= link_to 'Bottoms', "#" %></li>
+	   <li><%= link_to 'Shoes', "#" %></li>
 	</ul>
 </div>
 
