@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
     validates :last_name,  presence: true, length: { maximum: 140 }
     validates :password, presence: true, length: { minimum: 6 }
     validates :password_confirmation, presence: true
+
+    has_many :items
 private
 
   def create_remember_token

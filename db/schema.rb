@@ -29,11 +29,10 @@ ActiveRecord::Schema.define(:version => 20121121210516) do
     t.string   "email"
     t.string   "password"
     t.string   "password_digest"
-    t.datetime "created_at",                                                     :null => false
-    t.datetime "updated_at",                                                     :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.string   "remember_token"
-    t.string   "role"
-    t.decimal  "balance",         :precision => 8, :scale => 2, :default => 0.0
+    t.integer  "balance",         :default => 0
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
