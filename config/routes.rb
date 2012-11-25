@@ -18,7 +18,11 @@ App::Application.routes.draw do
 
   resources :sessions, only: [:new, :create, :destroy]
 
-  resources :users
+  resources :users do
+    member do
+      get :showmethemoney
+    end
+  end
 
   match '/signup',  to: 'users#new'
   match '/signin',  to: 'sessions#new'
