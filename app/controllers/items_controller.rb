@@ -10,6 +10,23 @@ class ItemsController < ApplicationController
     end
   end
 
+  # GET /items/item_type
+  def showHats
+    @items = Item.where("item_type = ?", "Hat")
+  end
+
+  def showTops
+    @items = Item.where("item_type = ?", "Top")
+  end
+
+  def showBottoms
+    @items = Item.where("item_type = ?", "Bottom")
+  end
+
+  def showShoes
+    @items = Item.where("item_type = ?", "Shoes")
+  end
+
   # GET /items/1
   # GET /items/1.json
   def show

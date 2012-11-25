@@ -1,6 +1,6 @@
 App::Application.routes.draw do
 
-  resources :items
+#  resources :items
 
   get "users/new"
 
@@ -27,6 +27,17 @@ App::Application.routes.draw do
   match '/signup',  to: 'users#new'
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
+  #match 'items/showHats', to: 'items#showHats'
+
+  resources :items do
+    collection do
+	get "showHats"
+	get "showTops"
+	get "showBottoms"
+	get "showShoes"
+    end
+  end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
