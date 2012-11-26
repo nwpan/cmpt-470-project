@@ -10,6 +10,13 @@ class ItemsController < ApplicationController
     end
   end
 
+  def purchase
+    @user = User.find(current_user.id)
+    @user.purchase_item(params[:id])
+    @user.save!
+    redirect_to :root
+  end
+
   # GET /items/item_type
   def showHats
     @items = Item.where("item_type = ?", "Hat")

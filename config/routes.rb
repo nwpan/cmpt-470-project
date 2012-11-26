@@ -30,11 +30,14 @@ App::Application.routes.draw do
   #match 'items/showHats', to: 'items#showHats'
 
   resources :items do
+    member do
+      get "purchase"
+    end
     collection do
-	get "showHats"
-	get "showTops"
-	get "showBottoms"
-	get "showShoes"
+    	get "showHats"
+    	get "showTops"
+    	get "showBottoms"
+    	get "showShoes"
     end
   end
 
