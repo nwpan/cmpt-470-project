@@ -13,9 +13,13 @@ class ItemsController < ApplicationController
 
   def purchase
     @user = User.find(current_user.id)
-    @user.purchase_item(params[:id])
+    if !@user.purchase_item(params[:id])
+      flash[:error] = "ERROR: Item not purchased, please check your balance on the profile page."
+      redirect_to items_path
+      return
+    end
     @user.save!
-    redirect_to :root
+    redirect_to user_path(current_user.id)
   end
 
   # GET /items/item_type
