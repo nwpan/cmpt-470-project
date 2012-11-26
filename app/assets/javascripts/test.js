@@ -15,7 +15,7 @@ function reset() {
   score = 0;
   playerObject.z = -4.0;
   testScene.objects = [testScene.objects[0], testScene.objects[1], testScene.objects[2], testScene.objects[3]];
-  obstacleModel = new GameObject();
+  obstacleModel = testScene.createObject();
   obstacleModel.z = Math.floor(Math.random()*3)*2-6;
   obstacleModel.x = 300.0;
   obstacleModel.color = [1.0, 1.0, 0.6];
