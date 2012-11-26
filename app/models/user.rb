@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
     def skip_validation
         true
     end
+
     def purchase_item(item_id)
         # Check if passed item_id is a valid entry in the items table.
         if !Item.exists?(:id => item_id)
