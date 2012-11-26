@@ -1,12 +1,14 @@
 App::Application.routes.draw do
 
+  resources :high_scores
+
 #  resources :items
 
   get "users/new"
 
   get "model_handler/index"
 
-  resources :model_handler, :only => [:show], :constraints => {:format => :json}
+  resources :model_handler, :only => [:show]
 
   resources :tech_eval_demo, :only => [:index]
 

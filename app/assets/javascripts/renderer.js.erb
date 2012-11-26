@@ -1,16 +1,37 @@
-var tdl;
-
-function Scene () {
+function Scene (program) {
   this.objects = [];
+  this.program = program;
+  this.view = new Float32Array(16);
+
+  tdl.fast.matrix4.lookAt(
+      this.view,
+      [0.0, 0.0, 3.0],
+      [0.0, 0.0, 0.0],
+      [0.0, 1.0, 0.0]);
 }
 
-Scene.prototype.draw = function() {
+Scene.prototype.camera = function(eye, center, up) {
+  tdl.fast.matrix4.lookAt(
+      this.view,
+      eye,
+      center,
+      up);
+};
+
+Scene.prototype.draw = function(projection) {
   for (var i = 0; i < this.objects.length; i++) {
-    this.objects[i].draw();
+    this.objects[i].draw(this.view, projection);
   };
 };
 
-function Animation () {
+Scene.prototype.createObject = function() {
+  var object = new GameObject(this.program);
+  this.objects.push(object);
+  return object;
+}
+
+function Animation (program) {
+  this.program = program;
   this.frames = [];
   this.currentFrame = 0;
   this.speed = 1;
@@ -40,7 +61,7 @@ Animation.prototype.addFrameFromJson = function (name, texture) {
       dataType: "json",
       async: false
   }); 
-
+  modelJson = JSON.parse( modelJson );
   var positions = new tdl.primitives.AttribBuffer(3, modelJson.position);
   var normals = new tdl.primitives.AttribBuffer(3, modelJson.normal);
   var texCoords = new tdl.primitives.AttribBuffer(2, modelJson.texCoord);
@@ -58,14 +79,15 @@ Animation.prototype.addFrameFromJson = function (name, texture) {
     textures = { diffuseSampler: tdl.textures.loadTexture(texture) };
   }
 
-  var model = new tdl.models.Model(program, primitives, textures);
+  var model = new tdl.models.Model(this.program, primitives, textures);
   this.frames.push(model);
 }
 
-function GameObject () {
+function GameObject (program) {
   var cube = tdl.primitives.createCube(1.0);
   var textures = {diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
   var model = new tdl.models.Model(program, cube, textures);
+  this.program = program;
   this.model = model;
   this.animations = [];
   this.currentAnimation = 0;
@@ -86,6 +108,12 @@ function GameObject () {
   this.renderBounds = false;
 }
 
+GameObject.prototype.createAnimation = function () {
+  var animation = new Animation(this.program);
+  this.animations.push(animation);
+  return animation;
+}
+
 GameObject.prototype.loadModelFromJson = function (name, texture) {
   var modelJson = ""; 
   $.ajax({
@@ -99,6 +127,7 @@ GameObject.prototype.loadModelFromJson = function (name, texture) {
       dataType: "json",
       async: false
   }); 
+  modelJson = JSON.parse( modelJson );
   var positions = new tdl.primitives.AttribBuffer(3, modelJson.position);
   var normals = new tdl.primitives.AttribBuffer(3, modelJson.normal);
   var texCoords = new tdl.primitives.AttribBuffer(2, modelJson.texCoord);
@@ -117,7 +146,32 @@ GameObject.prototype.loadModelFromJson = function (name, texture) {
     textures = { diffuseSampler: tdl.textures.loadTexture(texture) };
   }
 
-  var model = new tdl.models.Model(program, primitives, textures);
+  var model = new tdl.models.Model(this.program, primitives, textures);
+  this.model = model;
+  
+}
+
+GameObject.prototype.loadModelFromInput = function (id) {
+  var modelJson = JSON.parse( $("input#" + id).val() );
+  var positions = new tdl.primitives.AttribBuffer(3, modelJson.position);
+  var normals = new tdl.primitives.AttribBuffer(3, modelJson.normal);
+  var texCoords = new tdl.primitives.AttribBuffer(2, modelJson.texCoord);
+  var indices = new tdl.primitives.AttribBuffer(3, modelJson.indices, 'Uint16Array');
+  var primitives = {
+    position: positions,
+    normal: normals,
+    texCoord: texCoords,
+    indices: indices};
+  
+  var textures;
+
+  if (typeof texture == 'undefined' ) {
+    textures = { diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
+  } else {
+    textures = { diffuseSampler: tdl.textures.loadTexture(texture) };
+  }
+
+  var model = new tdl.models.Model(this.program, primitives, textures);
   this.model = model;
   
 }
@@ -129,7 +183,7 @@ GameObject.prototype.setTexture = function(image_path) {
 };
 
   
-GameObject.prototype.draw = function() {
+GameObject.prototype.draw = function(view, projection) {
   if(this.animations.length) {
     this.model = this.animations[this.currentAnimation].getFrame();
   }
@@ -151,7 +205,7 @@ GameObject.prototype.draw = function() {
   if(this.renderBounds) {
     var cube = tdl.primitives.createCube(1.0);
     var textures = {diffuseSampler: tdl.textures.loadTexture([255, 0, 0, 1.0])};
-    var boundingBox = new tdl.models.Model(program, cube, textures);
+    var boundingBox = new tdl.models.Model(this.program, cube, textures);
     var boxTransform = new Float32Array(16);
     tdl.fast.identity4(boxTransform);
     tdl.fast.matrix4.scale(boxTransform, [this.boundWidth, this.boundHeight, this.boundDepth]);
@@ -167,77 +221,68 @@ GameObject.prototype.draw = function() {
 
 };
 
+function Renderer(canvas) {
+  this.canvas = canvas;
+  this.canvas.width = $("body").width();
+  this.canvas.height = window.innerHeight - $(".navbar").height();
 
-var canvas;
-var gl;
-var program;
+  this.gl = tdl.webgl.setupWebGL(this.canvas);
+  if (!this.gl) {
+    return;  // Do nothing
+  }
+  this.program = this.createProgramFromTags("vertex-shader", "fragment-shader");
 
-var transform = new Float32Array(16);
-var view = new Float32Array(16);
-var projection = new Float32Array(16);
-var eye = [-5.0, 3.0, 2.0];
-var sceneToRender;
-var renderProcesss;
+  this.projection = new Float32Array(16);
+  tdl.fast.matrix4.perspective(
+        this.projection,
+        tdl.math.degToRad(60),
+        this.canvas.clientWidth / this.canvas.clientHeight,
+        1,
+        5000);
 
+  this.gl.depthMask(true);
+  this.gl.clearColor(0.1,0.1,0.1,1);
+  this.gl.clearDepth(1);
+  this.gl.enable(this.gl.CULL_FACE);
+  this.gl.enable(this.gl.DEPTH_TEST);
+}
 
-function createProgramFromTags(vertexTagId, fragmentTagId) {
+Renderer.prototype.createProgramFromTags = function(vertexTagId, fragmentTagId) {
   return tdl.programs.loadProgram(
       document.getElementById(vertexTagId).text,
       document.getElementById(fragmentTagId).text);
 }
 
-function initRenderer() {
-  canvas = document.getElementById("canvas");
-  canvas.width = $("body").width();
-  canvas.height = window.innerHeight - $(".navbar").height();
+Renderer.prototype.createScene = function() {
+  var scene = new Scene(this.program);
+  this.sceneToRender = scene;
+  return scene;
+}
 
-  gl = tdl.webgl.setupWebGL(canvas);
-  if (!gl) {
-    return;  // Do nothing
-  }
-  program = createProgramFromTags("vertex-shader", "fragment-shader");
-
-  tdl.fast.matrix4.perspective(
-        projection,
+Renderer.prototype.resizeCanvas = function() {
+  if (this.canvas.width != $("body").width() ||
+      this.canvas.height != window.innerHeight - $(".navbar").height()) {
+    this.canvas.width = $("body").width();
+    this.canvas.height = window.innerHeight - $(".navbar").height();
+    this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    tdl.fast.matrix4.perspective(
+        this.projection,
         tdl.math.degToRad(60),
-        canvas.clientWidth / canvas.clientHeight,
+        this.canvas.clientWidth / this.canvas.clientHeight,
         1,
         5000);
-
-  tdl.fast.matrix4.lookAt(
-      view,
-      eye,
-      [0.0, 0.0, -4.0],
-      [0.0, 1.0, 0.0]);
-  gl.depthMask(true);
-  gl.clearColor(0.1,0.1,0.1,1);
-  gl.clearDepth(1);
-  gl.enable(gl.CULL_FACE);
-  gl.enable(gl.DEPTH_TEST);
-}
-
-function setScene(scene) {
-  sceneToRender = scene;
-}
-
-function resizeCanvas() {
-  if (canvas.width != $("body").width() ||
-      canvas.height != window.innerHeight - $(".navbar").height()) {
-    canvas.width = $("body").width();
-    canvas.height = window.innerHeight - $(".navbar").height();
-    gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight);
   }
 }
 
-function render() {
-  resizeCanvas();
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  sceneToRender.draw();
-  renderProcesss = tdl.webgl.requestAnimationFrame(render, canvas);
+Renderer.prototype.render = function() {
+  this.resizeCanvas();
+  this.gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  this.sceneToRender.draw(this.projection);
+  this.renderProcesss = tdl.webgl.requestAnimationFrame(this.render.bind(this), this.canvas);
 }
 
-function stopRender() {
-  tdl.webgl.cancelRequestAnimationFrame(renderProcesss);
+Renderer.prototype.stopRender = function() {
+  tdl.webgl.cancelRequestAnimationFrame(this.renderProcesss);
 }
 
 
