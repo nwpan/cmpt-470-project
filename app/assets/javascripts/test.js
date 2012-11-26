@@ -6,6 +6,7 @@ var jumping  = false;
 var score = 0;
 var life = 3;
 var runningLoop;
+var renderer;
 
 function reset() {
   score = 0;
@@ -14,7 +15,7 @@ function reset() {
   score = 0;
   playerObject.z = -4.0;
   testScene.objects = [testScene.objects[0], testScene.objects[1], testScene.objects[2], testScene.objects[3]];
-  obstacleModel = new GameObject();
+  obstacleModel = testScene.createObject();
   obstacleModel.z = Math.floor(Math.random()*3)*2-6;
   obstacleModel.x = 300.0;
   obstacleModel.color = [1.0, 1.0, 0.6];
@@ -54,14 +55,13 @@ function gameLoop() {
 
   if(score % 500 == 0) {
     if(obstacles.length < 100) {
-      obstacleModel = new GameObject();
+      obstacleModel = testScene.createObject();
       obstacleModel.z = Math.floor(Math.random()*3)*2-6;
       obstacleModel.x = 300.0;
       obstacleModel.width = 2.0;
       obstacleModel.boundWidth = 3.0;
       obstacleModel.color = [1.0, 1.0, 0.6];
       obstacleModel.setTexture("assets/crate.jpg");
-      testScene.objects.push(obstacleModel);
       obstacles.push(obstacleModel);
     }
   }
@@ -83,7 +83,7 @@ function gameLoop() {
         $("#game-over").removeClass("hidden");
         $("#status").addClass("hidden").hide();;
         $(".score").html(score);
-        stopRender();
+        renderer.stopRender();
         clearInterval(runningLoop);
         break;   
     }
@@ -124,7 +124,7 @@ $(function() {
   $("#play-again").click(function(ev) {
     reset();
     runningLoop = setInterval(gameLoop, 1000 / 60);
-    render();
+    renderer.render();
     $("#canvas").show();
     $("#game-over").addClass("hidden");
     $("#status").removeClass("hidden").show();
@@ -157,35 +157,41 @@ $(function() {
       }
   });
   
-  initRenderer();
+  renderer = new Renderer($('#canvas')[0]);
 
-  var run = new Animation();
+
+  $('#loading').hide();
+
+  testScene = new Scene();
+  renderer.setScene(testScene);
+
+  testScene.camera([-5.0, 3.0, 2.0],
+      [0.0, 0.0, -4.0],
+      [0.0, 1.0, 0.0]);
+  
+
+  playerObject = testScene.createObject();
+  playerObject.z = -4.0;
+  playerObject.x = -5;
+  playerObject.y = 2.0;
+  playerObject.rotateY = 100;
+  playerObject.boundHeight = 1.3;
+  playerObject.loadModelFromJson("/run/charrun1", "assets/char.jpg");
+
+  var run = playerObject.createAnimation();
   for(var i = 1; i <= 13; i++ ) {
     run.addFrameFromJson("/run/charrun" + i.toString(), "assets/char.jpg");
   }
   run.speed = 0.5;
 
-  var jump = new Animation();
-  for(var i = 8; i <= 28; i++ ) {
+  var jump = playerObject.createAnimation();
+  for(var i = 8; i <= 37; i++ ) {
     jump.addFrameFromJson("/jump/charjump" + i.toString(), "assets/char.jpg");
   }
   jump.speed = 0.35;
   jump.loop = false;
 
-  $('#loading').hide();
-  
-
-  var testObject = new GameObject();
-  testObject.z = -4.0;
-  testObject.x = -5;
-  testObject.y = 2.0;
-  testObject.rotateY = 100;
-  testObject.boundHeight = 1.3;
-  testObject.loadModelFromJson("/run/charrun1", "assets/char.jpg");
-  testObject.animations.push(run);
-  testObject.animations.push(jump);
-
-  var testObject3 = new GameObject();
+  var testObject3 = testScene.createObject();
   testObject3.z = -4.0;
   testObject3.y = -1.0;
   testObject3.width = 500.0;
@@ -194,7 +200,7 @@ $(function() {
   testObject3.boundDepth = 2.0;
   testObject3.color = [0.8, 0.5, 0.5];
 
-  var testObject4 = new GameObject();
+  var testObject4 = testScene.createObject();
   testObject4.z = -6.0;
   testObject4.y = -1.0;
   testObject4.width = 500.0;
@@ -203,7 +209,7 @@ $(function() {
   testObject4.boundDepth = 2.0;
   testObject4.color = [0.5, 0.8, 0.5];
 
-  var testObject5 = new GameObject();
+  var testObject5 = testScene.createObject();
   testObject5.z = -2.0;
   testObject5.y = -1.0;
   testObject5.width = 500.0;
@@ -212,7 +218,7 @@ $(function() {
   testObject5.boundDepth = 2.0;
   testObject5.color = [0.5, 0.5, 0.8];
 
-  obstacleModel = new GameObject();
+  obstacleModel = testScene.createObject();
   obstacleModel.z =  Math.floor(Math.random()*3)*2-6;
   obstacleModel.x = 300.0;
   obstacleModel.width = 2.0;
@@ -220,23 +226,12 @@ $(function() {
   obstacleModel.color = [1.0, 1.0, 0.6];
   obstacleModel.setTexture("assets/crate.jpg");
 
-  testScene = new Scene();
-  testScene.objects.push(testObject);
-  testScene.objects.push(testObject3);
-  testScene.objects.push(testObject4);
-  testScene.objects.push(testObject5);
-  
-  playerObject = testScene.objects[0];
-
-  testScene.objects.push(obstacleModel);
   obstacles.push(obstacleModel);
-
-  setScene(testScene);
 
   runningLoop = setInterval(gameLoop, 1000 / 60);
 
   $("#status").removeClass("hidden").show();
-  render();
+  renderer.render();
 
   return true;
 
