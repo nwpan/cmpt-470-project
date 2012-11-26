@@ -8,13 +8,18 @@ class ModelHandlerController < ApplicationController
     path = Rails.root.join("app/assets/json/#{json_var}.json")
 
     respond_to do |format|
+        format.html {
+          @json = File.open(Rails.root.join("app/assets/json/#{json_var}.json").to_s, 'r').read
+          render :layout => 'iframe'
+        }
         format.json {
             if File.exists?(path)
-                render :json => JSON.parse(File.open(Rails.root.join("app/assets/json/#{json_var}.json").to_s, 'r').read)
+                render :json => File.open(Rails.root.join("app/assets/json/#{json_var}.json").to_s, 'r')
             else
                 redirect_to :root
             end
         }
     end
   end
+
 end
