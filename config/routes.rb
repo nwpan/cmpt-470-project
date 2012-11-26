@@ -18,7 +18,9 @@ App::Application.routes.draw do
 
   resources :demo, :only => [:show, :index]
 
-  resources :sessions, only: [:new, :create, :destroy]
+  resources :sessions, :only => [:new, :create, :destroy]
+
+  resources :inventory, :only => [:destroy]
 
   resources :users do
     member do

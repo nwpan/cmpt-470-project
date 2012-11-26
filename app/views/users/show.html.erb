@@ -5,3 +5,19 @@ First Name: <%= @user.first_name %><br />
 Last Name: <%= @user.last_name %><br />
 Email: <%= @user.email %><br />
 Balance (in credits): <%= @user.balance %><br />
+<h4>Inventory</h4>
+<table>
+	<tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Credit Price</th>
+  	</tr>
+<% @user.items.each do |item| %>
+	<tr>
+		<td><%= item.name %></td>
+		<td><%= item.item_type %></td>
+		<td><%= item.price %></td>
+		<td><%= link_to "Delete", inventory_path(item.id), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	</tr>
+<% end %>
+</table>
