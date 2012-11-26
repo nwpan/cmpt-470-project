@@ -1,5 +1,6 @@
-function Scene () {
+function Scene (program) {
   this.objects = [];
+  this.program = program;
   this.view = new Float32Array(16);
 
   tdl.fast.matrix4.lookAt(
@@ -19,7 +20,7 @@ Scene.prototype.camera = function(eye, center, up) {
 
 Scene.prototype.draw = function(projection) {
   for (var i = 0; i < this.objects.length; i++) {
-    this.objects[i].draw(this.program, this.view, projection);
+    this.objects[i].draw(this.view, projection);
   };
 };
 
@@ -182,7 +183,7 @@ GameObject.prototype.setTexture = function(image_path) {
 };
 
   
-GameObject.prototype.draw = function(program, view, projection) {
+GameObject.prototype.draw = function(view, projection) {
   if(this.animations.length) {
     this.model = this.animations[this.currentAnimation].getFrame();
   }
@@ -204,7 +205,7 @@ GameObject.prototype.draw = function(program, view, projection) {
   if(this.renderBounds) {
     var cube = tdl.primitives.createCube(1.0);
     var textures = {diffuseSampler: tdl.textures.loadTexture([255, 0, 0, 1.0])};
-    var boundingBox = new tdl.models.Model(program, cube, textures);
+    var boundingBox = new tdl.models.Model(this.program, cube, textures);
     var boxTransform = new Float32Array(16);
     tdl.fast.identity4(boxTransform);
     tdl.fast.matrix4.scale(boxTransform, [this.boundWidth, this.boundHeight, this.boundDepth]);
@@ -252,9 +253,10 @@ Renderer.prototype.createProgramFromTags = function(vertexTagId, fragmentTagId) 
       document.getElementById(fragmentTagId).text);
 }
 
-Renderer.prototype.setScene = function(scene) {
-  scene.program = this.program;
+Renderer.prototype.createScene = function() {
+  var scene = new Scene(this.program);
   this.sceneToRender = scene;
+  return scene;
 }
 
 Renderer.prototype.resizeCanvas = function() {

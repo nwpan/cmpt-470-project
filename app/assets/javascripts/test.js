@@ -162,8 +162,7 @@ $(function() {
 
   $('#loading').hide();
 
-  testScene = new Scene();
-  renderer.setScene(testScene);
+  testScene = renderer.createScene();
 
   testScene.camera([-5.0, 3.0, 2.0],
       [0.0, 0.0, -4.0],
