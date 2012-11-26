@@ -265,6 +265,12 @@ Renderer.prototype.resizeCanvas = function() {
     this.canvas.width = $("body").width();
     this.canvas.height = window.innerHeight - $(".navbar").height();
     this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    tdl.fast.matrix4.perspective(
+        this.projection,
+        tdl.math.degToRad(60),
+        this.canvas.clientWidth / this.canvas.clientHeight,
+        1,
+        5000);
   }
 }
 
