@@ -1,3 +1,3 @@
 class HighScore < ActiveRecord::Base
-  attr_accessible :game, :score, :user_id
+  belongs_to :user
 end

@@ -1,8 +1,8 @@
-<h1>Listing high_scores</h1>
+<h1>High Scores</h1>
 
 <table>
   <tr>
-    <th>User</th>
+    <th>Name</th>
     <th>Game</th>
     <th>Score</th>
     <th></th>
@@ -12,7 +12,7 @@
 
 <% @high_scores.each do |high_score| %>
   <tr>
-    <td><%= high_score.user_id %></td>
+    <td><%= @name %></td>
     <td><%= high_score.game %></td>
     <td><%= high_score.score %></td>
     <td><%= link_to 'Show', high_score %></td>

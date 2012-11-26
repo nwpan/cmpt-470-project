@@ -3,6 +3,7 @@ class HighScoresController < ApplicationController
   # GET /high_scores.json
   def index
     @high_scores = HighScore.all
+    @name = User.find(current_user.id).first_name
 
     respond_to do |format|
       format.html # index.html.erb
