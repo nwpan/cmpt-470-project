@@ -3,7 +3,6 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @user.update_column(:balance, @user.balance + 5)
   end
 
   def new
@@ -25,5 +24,11 @@ class UsersController < ApplicationController
         flash.now[:error] = error.html_safe
         render 'new', :layout => 'application_login'
     end
+  end
+
+  def showmethemoney
+    @user = User.find(params[:id])
+    @user.update_column(:balance, @user.balance + 1000)
+    redirect_to :root, :notice => "Starcraft cheat enabled. We've deposited 1000 credits to the account, #{@user.id}!"
   end
 end
