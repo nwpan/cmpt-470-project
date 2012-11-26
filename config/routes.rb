@@ -1,5 +1,7 @@
 App::Application.routes.draw do
 
+  resources :high_scores
+
 #  resources :items
 
   get "users/new"
@@ -30,6 +32,9 @@ App::Application.routes.draw do
   #match 'items/showHats', to: 'items#showHats'
 
   resources :items do
+    member do
+        get "purchase"
+    end
     collection do
 	get "showHats"
 	get "showTops"

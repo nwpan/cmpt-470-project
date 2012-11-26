@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  before_filter :sign_in_required
   # GET /items
   # GET /items.json
   def index
@@ -8,6 +9,11 @@ class ItemsController < ApplicationController
       format.html # index.html.erb
       format.json { render json: @items }
     end
+  end
+
+  def purchase(id)
+  current_user.purchase_item(id)
+
   end
 
   # GET /items/item_type
