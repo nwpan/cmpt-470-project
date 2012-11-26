@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
 
     has_many :inventory
     has_many :items, :through => :inventory
+    has_many :high_score
     def skip_validation
         true
     end
