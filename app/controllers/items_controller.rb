@@ -20,19 +20,19 @@ class ItemsController < ApplicationController
 
   # GET /items/item_type
   def showHats
-    @items = Item.where("item_type = ?", "Hat")
+    @items = Item.where("item_type = ?", "Hat").order("price ASC")
   end
 
   def showTops
-    @items = Item.where("item_type = ?", "Top")
+    @items = Item.where("item_type = ?", "Top").order("price ASC")
   end
 
   def showBottoms
-    @items = Item.where("item_type = ?", "Bottom")
+    @items = Item.where("item_type = ?", "Bottom").order("price ASC")
   end
 
   def showShoes
-    @items = Item.where("item_type = ?", "Shoes")
+    @items = Item.where("item_type = ?", "Shoes").order("price ASC")
   end
 
   # GET /items/1
