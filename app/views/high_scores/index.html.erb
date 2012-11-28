@@ -9,7 +9,7 @@
 
 <% @crate_jumper_high_scores.each do |high_score| %>
   <tr>
-    <td><%= @name %></td>
+    <td><%= high_score.first_name %></td>
     <td><%= high_score.game %></td>
     <td><%= high_score.score %></td>
   </tr>
