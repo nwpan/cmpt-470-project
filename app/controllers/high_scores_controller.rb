@@ -1,9 +1,11 @@
 class HighScoresController < ApplicationController
+  before_filter :sign_in_required
   # GET /high_scores
   # GET /high_scores.json
   def index
-    @high_scores = HighScore.all
+    @high_scores = HighScore.order("score DESC").limit(10)
     @name = User.find(current_user.id).first_name
+    @my_high_scores = HighScore.where("user_id = ?", current_user.id).order("score DESC").limit(10)
 
     respond_to do |format|
       format.html # index.html.erb
