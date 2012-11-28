@@ -32,6 +32,15 @@ class User < ActiveRecord::Base
         end
         return false
     end
+    def new_score(game, score)
+        currentScore = HighScore.create({:game => game})
+        currentScore.score = score
+        
+        if self.high_score << currentScore != nil
+            return true
+        end
+        return false
+    end
 private
     def create_remember_token
         self.remember_token = SecureRandom.urlsafe_base64

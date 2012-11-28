@@ -41,16 +41,9 @@ class HighScoresController < ApplicationController
   # POST /high_scores
   # POST /high_scores.json
   def create
-    @high_score = HighScore.new(params[:high_score])
-
-    respond_to do |format|
-      if @high_score.save
-        format.html { redirect_to @high_score, notice: 'High score was successfully created.' }
-        format.json { render json: @high_score, status: :created, location: @high_score }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @high_score.errors, status: :unprocessable_entity }
-      end
+    @user = User.find(current_user.id)
+    if @user.new_score(params[:game], params[:high_score])
+      @user.save!
     end
   end
 

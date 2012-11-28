@@ -79,6 +79,18 @@ function gameLoop() {
     }
     else if (collision_detect(playerObject, obstacles[i]))
     {
+        $.ajax({
+          type: 'POST',
+          url: '/high_scores',
+          data: {
+            high_score: score, 
+            game: "Crate Jumper"
+          },
+          success: function(data)
+          {
+            alert("POSTED. Check high score page...");
+          }
+        });
         $("#canvas").hide();
         $("#game-over").removeClass("hidden");
         $("#status").addClass("hidden").hide();;
