@@ -3,7 +3,7 @@ class HighScoresController < ApplicationController
   # GET /high_scores
   # GET /high_scores.json
   def index
-    @high_scores = HighScore.order("score DESC").limit(10)
+    @crate_jumper_high_scores = HighScore.where("game = ?", "Crate Jumper").order("score DESC").limit(10)
     @name = User.find(current_user.id).first_name
     @my_high_scores = HighScore.where("user_id = ?", current_user.id).order("score DESC").limit(10)
 

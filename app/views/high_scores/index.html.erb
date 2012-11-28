@@ -7,21 +7,17 @@
     <th>Score</th>
   </tr>
 
-<% @high_scores.each do |high_score| %>
+<% @crate_jumper_high_scores.each do |high_score| %>
   <tr>
     <td><%= @name %></td>
     <td><%= high_score.game %></td>
     <td><%= high_score.score %></td>
-    <td><%= link_to 'Show', high_score %></td>
-    <td><%= link_to 'Edit', edit_high_score_path(high_score) %></td>
-    <td><%= link_to 'Destroy', high_score, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New High score', new_high_score_path %>
 
 <h1>My Scores</h1>
 
@@ -35,9 +31,6 @@
   <tr>
     <td><%= high_score.game %></td>
     <td><%= high_score.score %></td>
-    <td><%= link_to 'Show', high_score %></td>
-    <td><%= link_to 'Edit', edit_high_score_path(high_score) %></td>
-    <td><%= link_to 'Destroy', high_score, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
 </table>
