@@ -1,5 +1,10 @@
 <h1>High Scores</h1>
 
+<% if @crate_jumper_high_scores.empty? %>
+   No scores to show.
+
+<% else %>
+
 <table>
   <tr>
     <th>Name</th>
@@ -16,11 +21,17 @@
 <% end %>
 </table>
 
+<% end %>
+
 <br />
 
 
 <h1>My Scores</h1>
 
+<% if @my_high_scores.empty? %>
+   No scores to show.
+
+<% else %>
 <table>
   <tr>
     <th>Game</th>
@@ -34,5 +45,7 @@
   </tr>
 <% end %>
 </table>
+
+<% end %>
 
 <br />

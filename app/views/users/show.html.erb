@@ -6,6 +6,11 @@ Last Name: <%= @user.last_name %><br />
 Email: <%= @user.email %><br />
 Balance (in credits): <%= @user.balance %><br />
 <h4>Inventory</h4>
+
+<% if @user.items.empty? %>
+   No items in inventory.
+
+<% else %>
 <table>
 	<tr>
     <th>Name</th>
@@ -21,3 +26,4 @@ Balance (in credits): <%= @user.balance %><br />
 	</tr>
 <% end %>
 </table>
+<% end %>
