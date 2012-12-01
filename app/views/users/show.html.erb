@@ -7,7 +7,7 @@ Email: <%= @user.email %><br />
 Balance (in credits): <%= @user.balance %><br />
 <h4>Inventory</h4>
 
-<% if @user.items.empty? %>
+<% if @user_items.empty? %>
    No items in inventory.
 
 <% else %>
@@ -17,7 +17,7 @@ Balance (in credits): <%= @user.balance %><br />
     <th>Type</th>
     <th>Credit Price</th>
   	</tr>
-<% @user.items.each do |item| %>
+<% @user_items.each do |item| %>
 	<tr>
 		<td><%= item.name %></td>
 		<td><%= item.item_type %></td>
@@ -27,3 +27,7 @@ Balance (in credits): <%= @user.balance %><br />
 <% end %>
 </table>
 <% end %>
+
+<div id = "pagination">
+   <%= paginate @user_items %>
+</div>
