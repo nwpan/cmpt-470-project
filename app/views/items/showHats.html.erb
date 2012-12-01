@@ -14,7 +14,13 @@
 
 
 <table class="store">
-
+<tr>
+	<td colspan="3">
+<div>
+    <%= render :partial => "notice/notice_div" %>
+</div>
+	</td>
+</tr>
 <% @items.each do |item| %>
   <tr>
     <td>
@@ -25,7 +31,7 @@
     <td><%= item.name %><br> Type: <%= item.item_type %><br>Price: <%= item.price %><br><%= item.description %></td>
     <td>
 	<div class="links">
-		<%= button_to "Buy", item, :confirm => "Are you sure you want to buy " +item.name+ "?" %>
+		<%= button_to "Buy", purchase_item_path(item), :method => :get, :confirm => "Are you sure you want to buy " +item.name+ "?" %>
 	</div>
     </td>
   </tr>
