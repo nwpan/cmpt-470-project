@@ -52,10 +52,10 @@
                 <ul class="dropdown-menu">
                     <li><%= link_to "Profile", user_path(current_user) %></li>
                     <li><%= link_to "Avatar", "#" %></li>
-                    <li><%= link_to "Settings", "#" %></li>
                     <li><%= link_to "Sign Out", signout_path, method: "delete" %></li>
                 </ul>
               </li>
+	      <li><%= link_to "Credits: #{current_user.balance}", user_path(current_user) %> </li>
             </ul>
         </div>
     </div>
