@@ -14,7 +14,13 @@
 
 
 <table class="store">
-
+<tr>
+	<td colspan="3">
+<div>
+    <%= render :partial => "notice/notice_div" %>
+</div>
+	</td>
+</tr>
 <% @items.each do |item| %>
   <tr>
     <td>
