@@ -43,7 +43,9 @@ class HighScoresController < ApplicationController
   # POST /high_scores.json
   def create
     @user = User.find(current_user.id)
-    if @user.new_score(params[:game], params[:high_score])
+    score = params[:high_score]
+    if @user.new_score(params[:game], score)
+      @user.balance += (score.to_i / 500)*1000
       @user.save!
     end
   end
