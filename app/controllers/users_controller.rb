@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @user_items = @user.items.order("name ASC").page(params[:page])
   end
 
   def new

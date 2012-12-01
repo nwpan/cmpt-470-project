@@ -12,15 +12,12 @@
 	</ul>
 </div>
 
+<div id = "pagination">
+   <%= paginate @items %>
+</div>
 
 <table class="store">
-<tr>
-	<td colspan="3">
-<div>
-    <%= render :partial => "notice/notice_div" %>
-</div>
-	</td>
-</tr>
+
 <% @items.each do |item| %>
   <tr>
     <td>
@@ -45,7 +42,3 @@
 </div>
 <br />
 
-
-<%# if session[:login] == 1 %>
-	<%= link_to 'New Item', new_item_path %>
-<%# end %>
