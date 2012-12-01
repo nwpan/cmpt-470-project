@@ -16,6 +16,8 @@ App::Application.routes.draw do
 
   resources :tech_eval, :only => [:index]
 
+  resources :space_shooter_game, :only => [:index]
+
   resources :demo, :only => [:show, :index]
 
   resources :sessions, :only => [:new, :create, :destroy]
