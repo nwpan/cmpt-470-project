@@ -3,7 +3,7 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
-    @items = Item.all
+    @items = Item.order("price ASC").page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -24,19 +24,19 @@ class ItemsController < ApplicationController
 
   # GET /items/item_type
   def showHats
-    @items = Item.where("item_type = ?", "Hat").order("price ASC")
+    @items = Item.where("item_type = ?", "Hat").order("price ASC").page(params[:page])
   end
 
   def showTops
-    @items = Item.where("item_type = ?", "Top").order("price ASC")
+    @items = Item.where("item_type = ?", "Top").order("price ASC").page(params[:page])
   end
 
   def showBottoms
-    @items = Item.where("item_type = ?", "Bottom").order("price ASC")
+    @items = Item.where("item_type = ?", "Bottom").order("price ASC").page(params[:page])
   end
 
   def showShoes
-    @items = Item.where("item_type = ?", "Shoes").order("price ASC")
+    @items = Item.where("item_type = ?", "Shoes").order("price ASC").page(params[:page])
   end
 
   # GET /items/1
