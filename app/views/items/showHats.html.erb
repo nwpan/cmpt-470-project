@@ -22,10 +22,12 @@
   <tr>
     <td>
 	<div class="image">
-	<%= link_to (image_tag item.image_url), item %>
+    <% if item.model_name? %>
+    <iframe src="/model_handler/show.html?model=<%= item.model_name%>" width="90" height="90" scrolling="no" frameBorder="0" >Browser not compatible.</iframe>
+    <% end %>
 	</div>
     </td>
-    <td><%= item.name %><br> Type: <%= item.item_type %><br>Price: <%= item.price %><br><%= item.description %></td>
+    <td><%= link_to item.name, item %><br> Type: <%= item.item_type %><br>Price: <%= item.price %><br><%= item.description %></td>
     <td>
 	<div class="links">
 		<%= button_to "Buy", purchase_item_path(item), :method => :get, :confirm => "Are you sure you want to buy " +item.name+ "?" %>

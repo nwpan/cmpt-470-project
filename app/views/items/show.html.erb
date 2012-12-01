@@ -18,8 +18,12 @@
 </p>
 
 <p>
-  <b>Image url:</b>
-  <%= @item.image_url %>
+  <b>Model:</b>
+  <% if @item.model_name? %>
+  <iframe src="/model_handler/show.html?model=<%= @item.model_name %>" width="90" height="90" scrolling="no" frameBorder="0" >Browser not compatible.</iframe>
+  <% else %>
+  Sorry, preview not available.
+  <% end %>
 </p>
 
 <p>

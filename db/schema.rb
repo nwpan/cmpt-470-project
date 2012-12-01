@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121125235227) do
+ActiveRecord::Schema.define(:version => 20121201211046) do
 
   create_table "high_scores", :force => true do |t|
     t.integer  "user_id"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(:version => 20121125235227) do
     t.string   "name"
     t.string   "item_type"
     t.integer  "price"
-    t.string   "image_url"
+    t.string   "model_name"
     t.text     "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
