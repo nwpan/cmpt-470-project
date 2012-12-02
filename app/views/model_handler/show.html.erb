@@ -15,8 +15,6 @@
 	uniform bool hasSkeleton;
 
 	uniform mat4 bones[64];
-	uniform mat4 bindShape;
-	uniform mat4 skelTransform;
 
 	varying vec3 v_normal;
 	varying vec3 v_position;
@@ -29,13 +27,14 @@
     	vec4 vertPosition;
 
     	if(hasSkeleton) {
+    		normalize(skinWeights);
 	    	mat4 skinningMat = skinWeights.x * bones[int(skinJoints.x)];
 	    	skinningMat += skinWeights.y * bones[int(skinJoints.y)];
 	    	skinningMat += skinWeights.z * bones[int(skinJoints.z)];
 	    	skinningMat += skinWeights.w * bones[int(skinJoints.w)];
 
-	    	v_normal = normalize(vec3(transformInv * ((skelTransform * skinningMat * bindShape) * (vec4(normal, 0.0)))));
-	    	vertPosition = mvp * ((skelTransform * skinningMat * bindShape) * vec4(position, 1));
+	    	v_normal = normalize(vec3(transformInv * (skinningMat * vec4(normal, 0.0))));
+	    	vertPosition = mvp * (skinningMat * vec4(position, 1));
 	    } else {
 	    	v_normal = normalize(vec3(transformInv * vec4(normal, 0.0)));
 	    	vertPosition = mvp * vec4(position, 1);

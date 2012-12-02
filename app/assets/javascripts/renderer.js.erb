@@ -68,8 +68,36 @@ GameObject.prototype.loadModelFromJson = function (name, texture) {
   }); 
   modelJson = JSON.parse( modelJson );
   if(typeof modelJson.model != "undefined") {
-    var positions = new tdl.primitives.AttribBuffer(3, modelJson.model.position);
-    var normals = new tdl.primitives.AttribBuffer(3, modelJson.model.normal);
+    var positions = modelJson.model.position;
+    var normals = modelJson.model.normal;
+    var bindShape = modelJson.skeleton.bindShape;
+
+    for (var i = 0; i < positions.length; i+= 3) {
+      var position = new Float32Array(4);
+      position[0] = positions[i];
+      position[1] = positions[i+1];
+      position[2] = positions[i+2];
+      position[3] = 1;
+      var boundPosition = new Float32Array(4);
+      tdl.fast.mulMatrix4Vector(boundPosition, bindShape, position);
+      positions[i] = boundPosition[0];
+      positions[i+1] = boundPosition[1]; 
+      positions[i+2] = boundPosition[2];
+
+      var normal = new Float32Array(4);
+      normal[0] = normals[i];
+      normal[1] = normals[i+1];
+      normal[2] = normals[i+2];
+      normal[3] = 0;
+      var boundNormal = new Float32Array(4);
+      tdl.fast.mulMatrix4Vector(boundNormal, bindShape, normal);
+      normals[i] = boundNormal[0];
+      normals[i+1] = boundNormal[1]; 
+      normals[i+2] = boundNormal[2];
+    };
+
+    var positions = new tdl.primitives.AttribBuffer(3, positions);
+    var normals = new tdl.primitives.AttribBuffer(3, normals);
     var texCoords = new tdl.primitives.AttribBuffer(2, modelJson.model.texCoord);
     var skinWeights = new tdl.primitives.AttribBuffer(4, modelJson.model.skinWeights);
     var skinJoints = new tdl.primitives.AttribBuffer(4, modelJson.model.skinJoints);
@@ -131,8 +159,37 @@ GameObject.prototype.loadModelFromJson = function (name, texture) {
 GameObject.prototype.loadModelFromInput = function (id) {
   var modelJson = JSON.parse( $("input#" + id).val() );
   if(typeof modelJson.model != "undefined") {
-    var positions = new tdl.primitives.AttribBuffer(3, modelJson.model.position);
-    var normals = new tdl.primitives.AttribBuffer(3, modelJson.model.normal);
+
+    var positions = modelJson.model.position;
+    var normals = modelJson.model.normal;
+    var bindShape = modelJson.skeleton.bindShape;
+
+    for (var i = 0; i < positions.length; i+= 3) {
+      var position = new Float32Array(4);
+      position[0] = positions[i];
+      position[1] = positions[i+1];
+      position[2] = positions[i+2];
+      position[3] = 1;
+      var boundPosition = new Float32Array(4);
+      tdl.fast.mulMatrix4Vector(boundPosition, bindShape, position);
+      positions[i] = boundPosition[0];
+      positions[i+1] = boundPosition[1]; 
+      positions[i+2] = boundPosition[2];
+
+      var normal = new Float32Array(4);
+      normal[0] = normals[i];
+      normal[1] = normals[i+1];
+      normal[2] = normals[i+2];
+      normal[3] = 0;
+      var boundNormal = new Float32Array(4);
+      tdl.fast.mulMatrix4Vector(boundNormal, bindShape, normal);
+      normals[i] = boundNormal[0];
+      normals[i+1] = boundNormal[1]; 
+      normals[i+2] = boundNormal[2];
+    };
+
+    var positions = new tdl.primitives.AttribBuffer(3, positions);
+    var normals = new tdl.primitives.AttribBuffer(3, normals);
     var texCoords = new tdl.primitives.AttribBuffer(2, modelJson.model.texCoord);
     var skinWeights = new tdl.primitives.AttribBuffer(4, modelJson.model.skinWeights);
     var skinJoints = new tdl.primitives.AttribBuffer(4, modelJson.model.skinJoints);
@@ -215,7 +272,7 @@ GameObject.prototype.processBone = function(boneSource, bones, frame, boneId, pa
   var maxFrame = this.model.skeleton.totalFrames;
   var keyFrames = boneSource[boneId].keyFrames;
   var prevFrame = 0;
-  var nextFrame = maxFrame.toFixed(1);
+  var nextFrame = maxFrame;
   var exact = false;
 
   for(var keyFrame in keyFrames) {
@@ -259,6 +316,9 @@ GameObject.prototype.processBone = function(boneSource, bones, frame, boneId, pa
   if(typeof parentId != "undefined") {
     var parent = bones.subarray(parentId*16, (parentId+1)*16);
     tdl.fast.rowMajor.mulMatrixMatrix4(transform, parent, transform);
+  } else {
+    var skelTransform = new Float32Array(this.model.skeleton.transform);
+    tdl.fast.rowMajor.mulMatrixMatrix4(transform, skelTransform, transform);
   }
 
   bones.set(transform, boneId*16);
@@ -289,18 +349,13 @@ GameObject.prototype.draw = function(view, projection) {
   this.model.drawPrep();
 
   if(typeof this.model.skeleton != "undefined") {
-
-    var bindShape = new Float32Array(this.model.skeleton.bindShape);
-    tdl.fast.matrix4.transpose(bindShape, bindShape);
-    var skelTransform = new Float32Array(this.model.skeleton.transform);
-    tdl.fast.matrix4.transpose(skelTransform, skelTransform);
     var bones = this.setPose(currentFrame);
     currentFrame++;
     if(this.model.skeleton.totalFrames < currentFrame) {
       currentFrame = 0;
     }
     
-    this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp, "hasSkeleton" : true, "bindShape" : bindShape, "skelTransform": skelTransform,"bones": bones});
+    this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp, "hasSkeleton" : true, "bones": bones});
   } else {
     this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp, "hasSkeleton" : false});
   }
