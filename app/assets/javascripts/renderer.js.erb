@@ -399,7 +399,7 @@ function Renderer(canvas) {
         5000);
 
   this.gl.depthMask(true);
-  this.gl.clearColor(0.1,0.1,0.1,1);
+  this.color = [0.1,0.1,0.1];
   this.gl.clearDepth(1);
   this.gl.enable(this.gl.CULL_FACE);
   this.gl.enable(this.gl.DEPTH_TEST);
@@ -433,6 +433,7 @@ Renderer.prototype.resizeCanvas = function() {
 }
 
 Renderer.prototype.render = function() {
+  this.gl.clearColor(this.color[0], this.color[1], this.color[2], 1.0);
   this.resizeCanvas();
   this.gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   this.sceneToRender.draw(this.projection);
