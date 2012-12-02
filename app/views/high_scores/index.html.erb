@@ -1,5 +1,7 @@
 <h1>High Scores</h1>
 
+<h3>Crate Jumper</h3>
+
 <% if @crate_jumper_high_scores.empty? %>
    No scores to show.
 
@@ -25,6 +27,32 @@
 
 <br />
 
+<h3>Space Shooter</h3>
+
+<% if @space_shooter_high_scores.empty? %>
+   No scores to show.
+
+<% else %>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Game</th>
+    <th>Score</th>
+  </tr>
+
+<% @space_shooter_high_scores.each do |high_score| %>
+  <tr>
+    <td><%= high_score.first_name %></td>
+    <td><%= high_score.game %></td>
+    <td><%= high_score.score %></td>
+  </tr>
+<% end %>
+</table>
+
+<% end %>
+
+<br />
 
 <h1>My Scores</h1>
 
