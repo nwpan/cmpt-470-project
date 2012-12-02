@@ -11,7 +11,7 @@ var score = 0;
 var life = 3;
 var runningLoop;
 var renderer;
-
+var dirty = false;
 function reset() {
   alert("Not implemented!");
 }
@@ -42,10 +42,11 @@ var collision_detect = function(obj1, obj2) {
 function gameLoop() {
 	//game logic here
 
-  score+= 100;
+  dirty = false;
+  score+= 1;
   $(".score").html(score);
 
-  if(score % 500 == 0) {
+  if(score % 50 == 0) {
     if(obstacles.length < 100) {
       obstacleModel = scene.createObject();
       obstacleModel.y = Math.floor(Math.random()*8);
@@ -54,23 +55,48 @@ function gameLoop() {
       obstacleModel.boundWidth = 3.0;
       obstacleModel.color = [1.0, 1.0, 0.6];
       obstacleModel.setTexture("assets/crate.jpg");
-      obstacleModel.renderBounds = true;
       obstacles.push(obstacleModel);
     }
   }
 
   for(var i = 0; i < obstacles.length; i++) {
+      if (dirty)
+      {
+        break;
+      }
+      for(var o = 0; o < projectileObstacles.length; o++) {
+        if (collision_detect(obstacles[i], projectileObstacles[o]))
+        {
+          obstacles[i].x = -20;
+          obstacles[i].y = -300;
+          obstacles.splice(i,1);
+
+          projectileObstacles[o].x = -300;
+          projectileObstacles[o].y = -300;
+          projectileObstacles.splice(o,1);
+          dirty = true;
+          break;
+        }
+        else 
+        {
+          projectileObstacles[o].x += 1;
+        }
+      }
+  }
+
+  for(var i = 0; i < obstacles.length; i++) {
+    if (dirty)
+    {
+      break;
+    }
+    var playerCollision = collision_detect(playerObject, obstacles[i]);
   	if(obstacles[i].x <= -20)
   	{
       obstacles[i].y = Math.floor(Math.random()*8);
   	  obstacles[i].x = 100;
   	}
-    if (!collision_detect(playerObject, obstacles[i]))
-    {
-        obstacles[i].x -= 1;
-        continue;
-    }
-    else 
+
+    if (playerCollision)
     {
         /*$.ajax({
           type: 'POST',
@@ -92,32 +118,11 @@ function gameLoop() {
         clearInterval(runningLoop);
         break;   
     }
-  }
-
-  for(var i = 0; i < projectileObstacles.length; i++) {
-    for(var o = 0; o < obstacles.length; o++) {
-      if (!collision_detect(obstacles[o], projectileObstacles[i]))
-      {
-          projectileObstacles[i].x += 1;
-          continue;
-      }
-      else
-      {
-        obstacles[o] = 1500;
-        projectileObstacles[i] = -20;
-        continue
-      }
+    else if (!playerCollision)
+    {
+      obstacles[i].x -= 1;
     }
   }
-
-	if(playerObject.y < 0 + playerObject.boundHeight/2) {
-		playerObject.y = 0 + playerObject.boundHeight/2;
-    if(playerObject.currentAnimation == 1) {
-      playerObject.boundHeight *= 2;
-      playerObject.animations[1].currentFrame = 0;
-      playerObject.currentAnimation = 0;
-    }
-	}
 }
 
 $(function() {
@@ -148,12 +153,14 @@ $(function() {
         projectileModel = scene.createObject();
         projectileModel.y = playerObject.y;
         projectileModel.x = playerObject.x;
-        projectileModel.width = 2.0;
+        projectileModel.width = 3.0;
         projectileModel.boundWidth = 3.0;
+        projectileModel.boundHeight = 1;
+        projectileModel.height = 1;
         projectileModel.color = [1.0, 1.0, 0.6];
         projectileModel.setTexture("assets/crate.jpg");
-        projectileModel.renderBounds = true;
         projectileObstacles.push(projectileModel);
+        dirty = true;
         return false;
       }
       if (e.keyCode == 82) { //reset
@@ -180,7 +187,6 @@ $(function() {
   playerObject.rotateY = 100;
   playerObject.boundHeight = 0.5;
   playerObject.height = 0.5;
-  playerObject.renderBounds = true;
   playerObject.loadModelFromJson("/run/charrun1", "assets/char.jpg");
 
   /*
