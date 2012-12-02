@@ -184,7 +184,7 @@ $(function() {
   });
   
   renderer = new Renderer($('#canvas')[0]);
-
+  renderer.color = [0,0,0];
 
   $('#loading').hide();
 
