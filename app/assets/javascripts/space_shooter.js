@@ -179,10 +179,10 @@ $(function() {
   playerObject = scene.createObject();
   playerObject.x = -8;
   playerObject.y = 2.0;
-  playerObject.rotateY = 100;
+  //playerObject.rotateY = 100;
   playerObject.boundHeight = 0.5;
   playerObject.height = 0.5;
-  playerObject.loadModelFromJson("/run/charrun1", "assets/char.jpg");
+  playerObject.loadModelFromJson("spaceship", "assets/spaceship.png");
 
   /*
   var run = playerObject.createAnimation();
@@ -213,12 +213,12 @@ $(function() {
 
 
   projectileModel = scene.createObject();
-  projectileModel.width = 3.0;
+  projectileModel.width = 1.5;
   projectileModel.boundWidth = 3.0;
   projectileModel.boundHeight = 1;
   projectileModel.height = 1;
   projectileModel.color = [1.0, 1.0, 0.6];
-  projectileModel.setTexture("assets/crate.jpg");
+  projectileModel.loadModelFromJson("bullet");
 
   runningLoop = setInterval(gameLoop, 1000 / 60);
 
