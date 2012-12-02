@@ -11,6 +11,14 @@ class UsersController < ApplicationController
     @user_items = @user.items.order("name ASC").page(params[:page])
   end
 
+  def wear
+
+  end
+
+  def remove
+
+  end
+
   def new
     @user = User.new
 
