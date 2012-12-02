@@ -11,6 +11,14 @@ class UsersController < ApplicationController
     @user_items = @user.items.order("name ASC").page(params[:page])
   end
 
+  def wear
+
+  end
+
+  def remove
+
+  end
+
   def new
     @user = User.new
 
@@ -35,6 +43,6 @@ class UsersController < ApplicationController
   def showmethemoney
     @user = User.find(params[:id])
     @user.update_column(:balance, @user.balance + 1000)
-    redirect_to :root, :notice => "Starcraft cheat enabled. We've deposited 1000 credits to the account, #{@user.id}!"
+    redirect_to :root, :notice => "Starcraft cheat enabled. We've deposited 1000 credits to the account, #{@user.first_name}!"
   end
 end

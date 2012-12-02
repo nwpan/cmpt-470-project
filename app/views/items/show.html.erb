@@ -3,6 +3,14 @@
 </div>
 
 <p>
+  <% if @item.model_name? %>
+  <iframe src="/model_handler/show.html?model=<%= @item.model_name %>" width="300" height="300" scrolling="no" frameBorder="0" >Browser not compatible.</iframe>
+  <% else %>
+  Sorry, preview not available.
+  <% end %>
+</p>
+
+<p>
   <b>Name:</b>
   <%= @item.name %>
 </p>
@@ -15,15 +23,6 @@
 <p>
   <b>Price:</b>
   <%= @item.price %>
-</p>
-
-<p>
-  <b>Model:</b>
-  <% if @item.model_name? %>
-  <iframe src="/model_handler/show.html?model=<%= @item.model_name %>" width="90" height="90" scrolling="no" frameBorder="0" >Browser not compatible.</iframe>
-  <% else %>
-  Sorry, preview not available.
-  <% end %>
 </p>
 
 <p>
