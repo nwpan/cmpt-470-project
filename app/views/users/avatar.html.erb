@@ -1,3 +1,7 @@
+<h1>Avatar</h1>
+
+<iframe src = "/model_handler/show.html?model=avatar" width = 300 height = 300 scrolling = "no"></iframe>
+
 <h4>Inventory</h4>
 
 <% if @user_items.empty? %>
@@ -8,14 +12,13 @@
 	<tr>
     <th>Name</th>
     <th>Type</th>
-    <th>Credit Price</th>
   	</tr>
 <% @user_items.each do |item| %>
 	<tr>
 		<td><%= item.name %></td>
 		<td><%= item.item_type %></td>
-		<td><%= item.price %></td>
-		<td><%= link_to "Delete", inventory_path(item.id), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		<td><%= link_to "Wear", "#" %></td>
+		<td><%= link_to "Remove", "#" %></td>
 	</tr>
 <% end %>
 </table>
