@@ -4,6 +4,7 @@ class HighScoresController < ApplicationController
   # GET /high_scores.json
   def index
     @crate_jumper_high_scores = HighScore.select("first_name, game, score").where("game = ?", "Crate Jumper").order("score DESC").limit(10).joins(:user)
+    @space_shooter_high_scores = HighScore.select("first_name, game, score").where("game = ?", "Space Shooter").order("score DESC").limit(10).joins(:user)
     @my_high_scores = HighScore.where("user_id = ?", current_user.id).order("score DESC").limit(10)
 
     respond_to do |format|
