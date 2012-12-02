@@ -108,11 +108,6 @@ function gameLoop() {
 
 	if(playerObject.y < 0 + playerObject.boundHeight/2) {
 		playerObject.y = 0 + playerObject.boundHeight/2;
-    if(playerObject.currentAnimation == 1) {
-      playerObject.boundHeight *= 2;
-      playerObject.animations[1].currentFrame = 0;
-      playerObject.currentAnimation = 0;
-    }
 	}
 
 	if(jumping)
@@ -158,8 +153,6 @@ $(function() {
       if (e.keyCode == 32 || e.keyCode == 38) { //space or up
       	if(!jumping && playerObject.y == 0 + playerObject.boundHeight/2) {
           jumping = true;
-          playerObject.currentAnimation = 1;
-          playerObject.boundHeight /= 2;
      	}
          return false;
       }
@@ -188,19 +181,6 @@ $(function() {
   playerObject.rotateY = 100;
   playerObject.boundHeight = 1.3;
   playerObject.loadModelFromJson("/run/charrun1", "assets/char.jpg");
-
-  var run = playerObject.createAnimation();
-  for(var i = 1; i <= 13; i++ ) {
-    run.addFrameFromJson("/run/charrun" + i.toString(), "assets/char.jpg");
-  }
-  run.speed = 0.5;
-
-  var jump = playerObject.createAnimation();
-  for(var i = 8; i <= 37; i++ ) {
-    jump.addFrameFromJson("/jump/charjump" + i.toString(), "assets/char.jpg");
-  }
-  jump.speed = 0.35;
-  jump.loop = false;
 
   var testObject3 = testScene.createObject();
   testObject3.z = -4.0;
