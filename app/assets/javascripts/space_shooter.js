@@ -34,11 +34,6 @@ function reset() {
   projectileModel.loadModelFromJson("bullet");
   projectileObstacles.push(projectileModel);
 }
-Array.remove = function(array, from, to) {
-  var rest = array.slice((to || from) + 1 || array.length);
-  array.length = from < 0 ? array.length + from : from;
-  return array.push.apply(array, rest);
-};
 var collision_detect = function(obj1, obj2) {
 	
     var hHit = false;
@@ -99,7 +94,7 @@ function gameLoop() {
       }
       else 
       {
-        projectileObstacles[o].x += 0.1;
+        projectileObstacles[o].x += 1;
       }
     }
   }
@@ -166,7 +161,7 @@ $(function() {
          return false;
       }
       if (e.keyCode == 32) { //space
-        if (cnt == 2)
+        if (cnt == 10)
           cnt = 0;
         else
           cnt++;
@@ -231,16 +226,17 @@ $(function() {
   obstacles.push(obstacleModel);
 
 
-  projectileModel = scene.createObject();
-  projectileModel.width = 1.5;
-  projectileModel.boundWidth = 3.0;
-  projectileModel.boundHeight = 1;
-  projectileModel.height = 1;
-  projectileModel.color = [1.0, 1.0, 0.6];
-  projectileModel.loadModelFromJson("bullet");
+
 
   for (var i = 0; i < 10; i++)
   {
+    projectileModel = scene.createObject();
+    projectileModel.width = 1.5;
+    projectileModel.boundWidth = 3.0;
+    projectileModel.boundHeight = 1;
+    projectileModel.height = 1;
+    projectileModel.color = [1.0, 1.0, 0.6];
+    projectileModel.loadModelFromJson("bullet");
     projectileObstacles.push(projectileModel);
   }
 
