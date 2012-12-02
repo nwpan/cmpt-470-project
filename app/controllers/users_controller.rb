@@ -16,7 +16,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     if @user.save
         sign_in @user
-        redirect_to :root, :notice => "Hello -- we've noticed this is your first time logging into MeGL, please use the navigation menu on the top to get around."
+        redirect_to :root, :notice => "Hello! We've noticed this is your first time logging into MeGL. Please use the navigation menu on the top to get around."
     else
         error = ""
         @user.errors.full_messages.each do |message|
