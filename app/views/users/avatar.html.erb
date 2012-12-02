@@ -17,8 +17,10 @@
 	<tr>
 		<td><%= item.name %></td>
 		<td><%= item.item_type %></td>
-		<td><%= link_to "Wear", "#" %></td>
-		<td><%= link_to "Remove", "#" %></td>
+		<% if item.item_type == "Hat" %>
+		   <td><%= link_to "Wear", "#" %></td>
+		   <td><%= link_to "Remove", "#" %></td>
+		<% end %>
 	</tr>
 <% end %>
 </table>
