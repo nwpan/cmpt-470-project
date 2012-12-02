@@ -27,6 +27,7 @@ App::Application.routes.draw do
   resources :users do
     member do
       get :showmethemoney
+      get :avatar
     end
   end
 
@@ -34,6 +35,7 @@ App::Application.routes.draw do
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
   #match 'items/showHats', to: 'items#showHats'
+  #match 'users/:id/avatar', to: 'users#avatar'
 
   resources :items do
     member do
