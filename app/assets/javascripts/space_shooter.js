@@ -8,14 +8,37 @@ var projectileObstacles =[];
 
 var jumping  = false;
 var score = 0;
+var difficulty = 0;
 var life = 3;
 var runningLoop;
 var renderer;
 var dirty = false;
 function reset() {
-  alert("Not implemented!");
+  score = 0;
+  difficulty = 0;
+  playerObject.x = -8;
+  playerObject.y = 2.0;
+  scene.objects = [scene.objects[0], scene.objects[1], scene.objects[2]];
+  obstacleModel = scene.createObject();
+  obstacleModel.y = Math.floor(Math.random()*7)+1;
+  obstacleModel.x = 100.0;
+  obstacleModel.color = [1.0, 1.0, 0.6];
+  obstacleModel.setTexture("assets/crate.jpg");
+  obstacles.push(obstacleModel);
+  projectileModel = scene.createObject();
+  projectileModel.width = 1.5;
+  projectileModel.boundWidth = 3.0;
+  projectileModel.boundHeight = 1;
+  projectileModel.height = 1;
+  projectileModel.color = [1.0, 1.0, 0.6];
+  projectileModel.loadModelFromJson("bullet");
+  projectileObstacles.push(projectileModel);
 }
-
+Array.remove = function(array, from, to) {
+  var rest = array.slice((to || from) + 1 || array.length);
+  array.length = from < 0 ? array.length + from : from;
+  return array.push.apply(array, rest);
+};
 var collision_detect = function(obj1, obj2) {
 	
     var hHit = false;
@@ -43,13 +66,13 @@ function gameLoop() {
 	//game logic here
 
   dirty = false;
-  score+= 1;
+  difficulty+= 1;
   $(".score").html(score);
 
-  if(score % 50 == 0) {
+  if(difficulty % 100 == 0) {
     if(obstacles.length < 100) {
       obstacleModel = scene.createObject();
-      obstacleModel.y = Math.floor(Math.random()*8);
+      obstacleModel.y = Math.floor(Math.random()*7)+1;
       obstacleModel.x = 100.0;
       obstacleModel.width = 2.0;
       obstacleModel.boundWidth = 3.0;
@@ -59,46 +82,39 @@ function gameLoop() {
     }
   }
 
-  for(var i = 0; i < obstacles.length; i++) {
-      if (dirty)
+  
+  for(var o = 0; o < projectileObstacles.length; o++) {
+    for(var i = 0; i < obstacles.length; i++) {
+      if (projectileObstacles[o].x >= 12)
       {
-        break;
+        projectileObstacles[o].y = 100;
+        projectileObstacles[o].x = 100;
       }
-      for(var o = 0; o < projectileObstacles.length; o++) {
-        if (collision_detect(obstacles[i], projectileObstacles[o]))
-        {
-          obstacles[i].x = -20;
-          obstacles[i].y = -300;
-          obstacles.splice(i,1);
-
-          projectileObstacles[o].x = -300;
-          projectileObstacles[o].y = -300;
-          projectileObstacles.splice(o,1);
-          dirty = true;
-          break;
-        }
-        else 
-        {
-          projectileObstacles[o].x += 1;
-        }
+      if (collision_detect(obstacles[i], projectileObstacles[o]))
+      {
+        score += 100;
+        obstacles[i].x = -20;
+        projectileObstacles[o].y = 100;
+        projectileObstacles[o].x = 100;
       }
+      else 
+      {
+        projectileObstacles[o].x += 0.1;
+      }
+    }
   }
 
   for(var i = 0; i < obstacles.length; i++) {
-    if (dirty)
-    {
-      break;
-    }
     var playerCollision = collision_detect(playerObject, obstacles[i]);
   	if(obstacles[i].x <= -20)
   	{
-      obstacles[i].y = Math.floor(Math.random()*8);
+      obstacles[i].y = Math.floor(Math.random()*7)+1;
   	  obstacles[i].x = 100;
   	}
 
     if (playerCollision)
     {
-        /*$.ajax({
+        $.ajax({
           type: 'POST',
           url: '/high_scores',
           data: {
@@ -109,7 +125,7 @@ function gameLoop() {
           {
             alert("POSTED. Check high score page...");
           }
-        });*/
+        });
         $("#canvas").hide();
         $("#game-over").removeClass("hidden");
         $("#status").addClass("hidden").hide();;
@@ -124,7 +140,7 @@ function gameLoop() {
     }
   }
 }
-
+var cnt = 0;
 $(function() {
 
   $("#play-again").click(function(ev) {
@@ -150,16 +166,14 @@ $(function() {
          return false;
       }
       if (e.keyCode == 32) { //space
-        projectileModel = scene.createObject();
-        projectileModel.y = playerObject.y;
-        projectileModel.x = playerObject.x;
-        projectileModel.width = 3.0;
-        projectileModel.boundWidth = 3.0;
-        projectileModel.boundHeight = 1;
-        projectileModel.height = 1;
-        projectileModel.color = [1.0, 1.0, 0.6];
-        projectileModel.setTexture("assets/crate.jpg");
-        projectileObstacles.push(projectileModel);
+        if (cnt == 2)
+          cnt = 0;
+        else
+          cnt++;
+        
+        projectileObstacles[cnt].y = playerObject.y;
+        projectileObstacles[cnt].x = playerObject.x;
+
         dirty = true;
         return false;
       }
@@ -184,10 +198,10 @@ $(function() {
   playerObject = scene.createObject();
   playerObject.x = -8;
   playerObject.y = 2.0;
-  playerObject.rotateY = 100;
+  //playerObject.rotateY = 100;
   playerObject.boundHeight = 0.5;
   playerObject.height = 0.5;
-  playerObject.loadModelFromJson("/run/charrun1", "assets/char.jpg");
+  playerObject.loadModelFromJson("spaceship", "assets/spaceship.png");
 
   /*
   var run = playerObject.createAnimation();
@@ -216,7 +230,21 @@ $(function() {
 
   obstacles.push(obstacleModel);
 
-  runningLoop = setInterval(gameLoop, 1000 / 60);
+
+  projectileModel = scene.createObject();
+  projectileModel.width = 1.5;
+  projectileModel.boundWidth = 3.0;
+  projectileModel.boundHeight = 1;
+  projectileModel.height = 1;
+  projectileModel.color = [1.0, 1.0, 0.6];
+  projectileModel.loadModelFromJson("bullet");
+
+  for (var i = 0; i < 10; i++)
+  {
+    projectileObstacles.push(projectileModel);
+  }
+
+  runningLoop = setInterval(gameLoop, 1000 / 10);
 
   $("#status").removeClass("hidden").show();
   renderer.render();

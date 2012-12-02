@@ -8,9 +8,10 @@
 
 #Hats    
 Item.create :name => "Santa Hat", :item_type => "Hat", :price => 5000, :description => "Ho ho ho!"
-Item.create :name => "Fedora", :item_type => "Hat", :price => 16000, :description => "A stylish complement to any outfit."
+Item.create :name => "Fedora", :item_type => "Hat", :price => 16000, :description => "A stylish complement to any outfit.", :model_name => "fedora"
 Item.create :name => "Simple Hat", :item_type => "Hat", :price => 500, :description => "Just a simple hat to hide your messy hair."
 Item.create :name => "Birthday Hat", :item_type => "Hat", :price => 2500, :description => "Happy birthday!"
+Item.create :name => "College Hat", :item_type => "Hat", :price => 1750, :description => "Look smart with this college hat.", :model_name => "college-hat"
 
 #Tops    
 Item.create :name => "Simple Shirt", :item_type => "Top", :price => 500, :description => "For service, wear with Simple Shoes."
