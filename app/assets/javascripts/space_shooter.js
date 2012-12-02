@@ -8,6 +8,7 @@ var projectileObstacles =[];
 
 var jumping  = false;
 var score = 0;
+var difficulty = 0;
 var life = 3;
 var runningLoop;
 var renderer;
@@ -43,10 +44,10 @@ function gameLoop() {
 	//game logic here
 
   dirty = false;
-  score+= 1;
+  difficulty+= 1;
   $(".score").html(score);
 
-  if(score % 50 == 0) {
+  if(difficulty % 100 == 0) {
     if(obstacles.length < 100) {
       obstacleModel = scene.createObject();
       obstacleModel.y = Math.floor(Math.random()*8);
@@ -67,6 +68,7 @@ function gameLoop() {
       for(var o = 0; o < projectileObstacles.length; o++) {
         if (collision_detect(obstacles[i], projectileObstacles[o]))
         {
+          score += 100;
           obstacles[i].x = -20;
           obstacles[i].y = -300;
           obstacles.splice(i,1);
@@ -98,7 +100,7 @@ function gameLoop() {
 
     if (playerCollision)
     {
-        /*$.ajax({
+        $.ajax({
           type: 'POST',
           url: '/high_scores',
           data: {
@@ -109,7 +111,7 @@ function gameLoop() {
           {
             alert("POSTED. Check high score page...");
           }
-        });*/
+        });
         $("#canvas").hide();
         $("#game-over").removeClass("hidden");
         $("#status").addClass("hidden").hide();;
@@ -150,15 +152,8 @@ $(function() {
          return false;
       }
       if (e.keyCode == 32) { //space
-        projectileModel = scene.createObject();
         projectileModel.y = playerObject.y;
         projectileModel.x = playerObject.x;
-        projectileModel.width = 3.0;
-        projectileModel.boundWidth = 3.0;
-        projectileModel.boundHeight = 1;
-        projectileModel.height = 1;
-        projectileModel.color = [1.0, 1.0, 0.6];
-        projectileModel.setTexture("assets/crate.jpg");
         projectileObstacles.push(projectileModel);
         dirty = true;
         return false;
@@ -215,6 +210,15 @@ $(function() {
   obstacleModel.setTexture("assets/crate.jpg");
 
   obstacles.push(obstacleModel);
+
+
+  projectileModel = scene.createObject();
+  projectileModel.width = 3.0;
+  projectileModel.boundWidth = 3.0;
+  projectileModel.boundHeight = 1;
+  projectileModel.height = 1;
+  projectileModel.color = [1.0, 1.0, 0.6];
+  projectileModel.setTexture("assets/crate.jpg");
 
   runningLoop = setInterval(gameLoop, 1000 / 60);
 
