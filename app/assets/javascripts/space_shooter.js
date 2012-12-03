@@ -6,6 +6,9 @@ var obstacles =[];
 var projectileModel;
 var projectileObstacles =[];
 
+var starModel;
+var stars = [];
+
 var jumping  = false;
 var score = 0;
 var difficulty = 0;
@@ -19,12 +22,14 @@ function reset() {
   playerObject.x = -8;
   playerObject.y = 2.0;
   scene.objects = [scene.objects[0], scene.objects[1], scene.objects[2]];
+  obstacles = {};
   obstacleModel = scene.createObject();
   obstacleModel.y = Math.floor(Math.random()*7)+1;
   obstacleModel.x = 100.0;
   obstacleModel.color = [1.0, 1.0, 0.6];
   obstacleModel.setTexture("assets/crate.jpg");
   obstacles.push(obstacleModel);
+  projectileObstacles = {};
   projectileModel = scene.createObject();
   projectileModel.width = 1.5;
   projectileModel.boundWidth = 3.0;
@@ -33,12 +38,8 @@ function reset() {
   projectileModel.color = [1.0, 1.0, 0.6];
   projectileModel.loadModelFromJson("bullet");
   projectileObstacles.push(projectileModel);
+  scene.objects.push(obstacleModel);
 }
-Array.remove = function(array, from, to) {
-  var rest = array.slice((to || from) + 1 || array.length);
-  array.length = from < 0 ? array.length + from : from;
-  return array.push.apply(array, rest);
-};
 var collision_detect = function(obj1, obj2) {
 	
     var hHit = false;
@@ -99,7 +100,7 @@ function gameLoop() {
       }
       else 
       {
-        projectileObstacles[o].x += 0.1;
+        projectileObstacles[o].x += 1;
       }
     }
   }
@@ -139,6 +140,19 @@ function gameLoop() {
       obstacles[i].x -= 1;
     }
   }
+
+  for (var i = 0; i < 10; i++)
+  {
+    if (stars[i].x < -20)
+    {
+      stars[i].x = Math.floor(Math.random()*100)+50;
+      stars[i].y = Math.floor(Math.random()*7)+1;
+    }
+    else
+    {
+      stars[i].x -= 1;
+    }
+  }
 }
 var cnt = 0;
 $(function() {
@@ -166,7 +180,7 @@ $(function() {
          return false;
       }
       if (e.keyCode == 32) { //space
-        if (cnt == 2)
+        if (cnt == 10)
           cnt = 0;
         else
           cnt++;
@@ -184,7 +198,7 @@ $(function() {
   });
   
   renderer = new Renderer($('#canvas')[0]);
-
+  renderer.color = [0,0,0];
 
   $('#loading').hide();
 
@@ -231,16 +245,30 @@ $(function() {
   obstacles.push(obstacleModel);
 
 
-  projectileModel = scene.createObject();
-  projectileModel.width = 1.5;
-  projectileModel.boundWidth = 3.0;
-  projectileModel.boundHeight = 1;
-  projectileModel.height = 1;
-  projectileModel.color = [1.0, 1.0, 0.6];
-  projectileModel.loadModelFromJson("bullet");
+  for (var i = 0; i < 10; i++)
+  {
+    starModel = scene.createObject();
+    starModel.width = 1.5;
+    starModel.height = 1.5;
+    starModel.x = Math.floor(Math.random()*100)+50;
+    starModel.z = -4;
+    starModel.y = Math.floor(Math.random()*100)+1;
+    starModel.color = [1.0, 1.0, 0.6];
+    starModel.loadModelFromJson("star");
+    stars.push(starModel);
+  }
+
 
   for (var i = 0; i < 10; i++)
   {
+    projectileModel = scene.createObject();
+    projectileModel.width = 1.5;
+    projectileModel.boundWidth = 3.0;
+    projectileModel.boundHeight = 1;
+    projectileModel.height = 1;
+    playerObject.rotateY = 30;
+    projectileModel.color = [1.0, 1.0, 0.6];
+    projectileModel.loadModelFromJson("bullet");
     projectileObstacles.push(projectileModel);
   }
 
