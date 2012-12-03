@@ -21,11 +21,17 @@
 	attribute vec3 position;
 	attribute vec3 normal;
 	attribute vec2 texCoord;
+	attribute vec4 skinJoints;
+	attribute vec4 skinWeights;
 
 	uniform mat4 transform;
 	uniform mat4 mvp;
 	uniform mat4 transformInv;
 	uniform vec3 color;
+
+	uniform bool hasSkeleton;
+
+	uniform mat4 bones[64];
 
 	varying vec3 v_normal;
 	varying vec3 v_position;
@@ -34,11 +40,25 @@
 
 	void main() {
 		v_texCoord = texCoord;
-		v_normal = normalize(mat3(transformInv) * normal);
-    	v_position = vec3(transform * vec4(position, 1.0));
     	v_color = color;
+    	vec4 vertPosition;
 
-		gl_Position = mvp * vec4(position, 1);
+    	if(hasSkeleton) {
+    		normalize(skinWeights);
+	    	mat4 skinningMat = skinWeights.x * bones[int(skinJoints.x)];
+	    	skinningMat += skinWeights.y * bones[int(skinJoints.y)];
+	    	skinningMat += skinWeights.z * bones[int(skinJoints.z)];
+	    	skinningMat += skinWeights.w * bones[int(skinJoints.w)];
+
+	    	v_normal = normalize(vec3(transformInv * (skinningMat * vec4(normal, 0.0))));
+	    	vertPosition = mvp * (skinningMat * vec4(position, 1));
+	    } else {
+	    	v_normal = normalize(vec3(transformInv * vec4(normal, 0.0)));
+	    	vertPosition = mvp * vec4(position, 1);
+	    }
+
+    	v_position = vec3(vertPosition);
+		gl_Position = vertPosition;
 	}
 </script>
 <script id="fragment-shader" type="x-shader/x-fragment">

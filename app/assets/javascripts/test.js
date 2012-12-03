@@ -103,22 +103,27 @@ function gameLoop() {
 
 
 	if(playerObject.y > 0 && !jumping) {
-		playerObject.y-= 0.25/playerObject.y/5;
+		playerObject.y-= 0.5/playerObject.y/5;
 	}
 
 	if(playerObject.y < 0 + playerObject.boundHeight/2) {
 		playerObject.y = 0 + playerObject.boundHeight/2;
+    if(playerObject.currentAnimation == 1) {
+      playerObject.changeAnimation(0);
+    }
 	}
 
 	if(jumping)
 	{
-		if(playerObject.y < 2.0) {
+		if(playerObject.y < 2.5) {
 			playerObject.y += 0.2/playerObject.y/2;
       playerObject.x += 0.05;
 		} else {
 			jumping = false;
 		}
-	} else if ( playerObject.x > -5.0) {
+	}
+
+  if ( playerObject.x > -5.0) {
     playerObject.x -= 0.01;
     if(playerObject.x < -5.0) {
       playerObject.x = -5.0;
@@ -151,8 +156,9 @@ $(function() {
          return false;
       }
       if (e.keyCode == 32 || e.keyCode == 38) { //space or up
-      	if(!jumping && playerObject.y == 0 + playerObject.boundHeight/2) {
+      	if(!jumping && playerObject.y == 0 + playerObject.boundHeight/2 && playerObject.currentAnimation == 0) {
           jumping = true;
+          playerObject.changeAnimation(1);
      	}
          return false;
       }
@@ -172,6 +178,11 @@ $(function() {
   testScene.camera([-5.0, 3.0, 2.0],
       [0.0, 0.0, -4.0],
       [0.0, 1.0, 0.0]);
+
+  var run = new Animation(4, 50);
+  var jump = new Animation(60, 100);
+  jump.loop = false;
+  jump.speed = 0.8;
   
 
   playerObject = testScene.createObject();
@@ -180,7 +191,10 @@ $(function() {
   playerObject.y = 2.0;
   playerObject.rotateY = 100;
   playerObject.boundHeight = 1.3;
-  playerObject.loadModelFromJson("/run/charrun1", "assets/char.jpg");
+  playerObject.loadModelFromJson("avatar");
+  playerObject.animations.push(run);
+  playerObject.animations.push(jump);
+
 
   var testObject3 = testScene.createObject();
   testObject3.z = -4.0;

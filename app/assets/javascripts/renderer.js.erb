@@ -30,12 +30,35 @@ Scene.prototype.createObject = function() {
   return object;
 }
 
+function Animation (start, end) {
+  this.start = start;
+  this.end = end;
+  this.speed = 1;
+  this.currentFrame = 0;
+  this.loop = true;
+}
+
+Animation.prototype.getFrame = function() {
+  var frame = this.start + this.currentFrame;
+  this.currentFrame += this.speed;
+  if(this.currentFrame > this.end) {
+    if(this.loop) {
+      this.currentFrame = 0;
+    } else {
+      this.currentFrame = this.end - this.start;
+    }
+  }
+  return frame;
+};
+
 function GameObject (program) {
   var cube = tdl.primitives.createCube(1.0);
   var textures = {diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
   var model = new tdl.models.Model(program, cube, textures);
   this.program = program;
   this.model = model;
+  this.animations = [];
+  this.currentAnimation = 0;
   this.x = 0.0;
   this.y = 0.0;
   this.z = 0.0;
@@ -53,8 +76,14 @@ function GameObject (program) {
   this.renderBounds = false;
 }
 
-GameObject.prototype.loadModelFromJson = function (name, texture) {
-  var modelJson = ""; 
+GameObject.prototype.changeAnimation = function (id) {
+  this.currentAnimation = id;
+  this.animations[this.currentAnimation].currentFrame = 0;
+};
+
+GameObject.prototype.loadModelFromJson = function (name) {
+  var modelJson = "";
+  var texture = "/assets/" + name + ".png";
   $.ajax({
       url: 'model_handler/show.json',
       data: { model:name },
@@ -113,10 +142,10 @@ GameObject.prototype.loadModelFromJson = function (name, texture) {
     
     var textures;
 
-    if (typeof texture == 'undefined' ) {
-      textures = { diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
-    } else {
+    if (typeof texture != 'undefined') {
       textures = { diffuseSampler: tdl.textures.loadTexture(texture) };
+    } else {
+      textures = { diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
     }
 
     var model = new tdl.models.Model(this.program, primitives, textures);
@@ -143,10 +172,10 @@ GameObject.prototype.loadModelFromJson = function (name, texture) {
     
     var textures;
 
-    if (typeof texture == 'undefined' ) {
-      textures = { diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
-    } else {
+    if (typeof texture != 'undefined') {
       textures = { diffuseSampler: tdl.textures.loadTexture(texture) };
+    } else {
+      textures = { diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
     }
 
     var model = new tdl.models.Model(this.program, primitives, textures);
@@ -158,6 +187,7 @@ GameObject.prototype.loadModelFromJson = function (name, texture) {
 
 GameObject.prototype.loadModelFromInput = function (id) {
   var modelJson = JSON.parse( $("input#" + id).val() );
+  var texture = "/assets/" + $("input#" + id).attr("title") + ".png";
   if(typeof modelJson.model != "undefined") {
 
     var positions = modelJson.model.position;
@@ -328,8 +358,6 @@ GameObject.prototype.processBone = function(boneSource, bones, frame, boneId, pa
   };
 
 };
-
-var currentFrame = 0;
   
 GameObject.prototype.draw = function(view, projection) {
 
@@ -349,11 +377,11 @@ GameObject.prototype.draw = function(view, projection) {
   this.model.drawPrep();
 
   if(typeof this.model.skeleton != "undefined") {
-    var bones = this.setPose(currentFrame);
-    currentFrame++;
-    if(this.model.skeleton.totalFrames < currentFrame) {
-      currentFrame = 0;
+    var currentFrame = 0;
+    if(this.animations.length > 0) {
+      currentFrame = this.animations[this.currentAnimation].getFrame();
     }
+    var bones = this.setPose(currentFrame);
     
     this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp, "hasSkeleton" : true, "bones": bones});
   } else {

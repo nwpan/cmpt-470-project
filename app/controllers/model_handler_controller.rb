@@ -9,6 +9,7 @@ class ModelHandlerController < ApplicationController
 
     respond_to do |format|
         format.html {
+          @model = json_var
           @json = File.open(Rails.root.join("app/assets/json/#{json_var}.json").to_s, 'r').read
           render :layout => 'iframe'
         }

@@ -201,7 +201,7 @@ $(function() {
   //playerObject.rotateY = 100;
   playerObject.boundHeight = 0.5;
   playerObject.height = 0.5;
-  playerObject.loadModelFromJson("spaceship", "assets/spaceship.png");
+  playerObject.loadModelFromJson("spaceship");
 
   /*
   var run = playerObject.createAnimation();
