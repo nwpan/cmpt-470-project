@@ -10,12 +10,20 @@
 <% else %>
 <table>
 	<tr>
+    <th></th>
     <th>Name</th>
     <th>Type</th>
     <th>Options</th>
   	</tr>
 <% @user_items.each do |item| %>
 	<tr>
+		<td>
+		   <div class = "image">
+		   <% if item.model_name? %>		
+		   <iframe src="/model_handler/show.html?model=<%= item.model_name%>" width="90" height="90" scrolling="no" frameBorder="0" >Browser not compatible.</iframe>
+		   <% end %>
+		   </div>
+		</td>
 		<td><%= item.name %></td>
 		<td><%= item.item_type %></td>
 		<% if item.item_type == "Hat" %>
