@@ -12,14 +12,16 @@
 	<tr>
     <th>Name</th>
     <th>Type</th>
+    <th>Options</th>
   	</tr>
 <% @user_items.each do |item| %>
 	<tr>
 		<td><%= item.name %></td>
 		<td><%= item.item_type %></td>
 		<% if item.item_type == "Hat" %>
-		   <td><%= link_to "Wear", "#" %></td>
-		   <td><%= link_to "Remove", "#" %></td>
+		   <td><%= link_to "Wear", "#" %> &nbsp;&nbsp;&nbsp; <%= link_to "Remove", "#" %> </td>
+		<% else %>
+		   <td>This item is not yet equippable. </td>
 		<% end %>
 	</tr>
 <% end %>
