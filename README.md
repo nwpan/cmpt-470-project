@@ -18,7 +18,7 @@ Remember to SSH into our virtual server within the CMPT470 CSIL's server:
 
 Once logged in, please use the following to change directory to our server directory:
 ```shell
-    cd /www/var/dev_scripts
+    cd /var/www/dev_scripts
 ```
 
 Run the following script, you will be prompted for `sudo` to restart passenger at the end of the script:
