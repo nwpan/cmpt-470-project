@@ -26,7 +26,7 @@
 		</td>
 		<td><%= item.name %></td>
 		<td><%= item.item_type %></td>
-		<% if item.item_type == "Hat" %>
+		<% if item.item_type == "Hat" || item.item_type == "Colour" %>
 		   <td><%= link_to "Wear", wear_user_path(item) %> &nbsp;&nbsp;&nbsp; <%= link_to "Remove", remove_user_path(item) %> </td>
 		<% else %>
 		   <td>This item is not yet equippable. </td>
