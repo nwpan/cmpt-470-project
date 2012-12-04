@@ -12,11 +12,18 @@ class UsersController < ApplicationController
   end
 
   def wear
-
+    @user = User.find(current_user.id)
+    @item = Item.find(params[:id])
+    @user.hat = @item.id
+    @user.save!
+    redirect_to avatar_user_path(current_user.id)
   end
 
   def remove
-
+    @user = User.find(current_user.id)
+    @user.hat = nil
+    @user.save!
+    redirect_to avatar_user_path(current_user.id)
   end
 
   def new

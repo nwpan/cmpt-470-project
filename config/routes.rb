@@ -28,6 +28,8 @@ App::Application.routes.draw do
     member do
       get :showmethemoney
       get :avatar
+      get :wear
+      get :remove
     end
   end
 
