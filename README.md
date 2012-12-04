@@ -3,6 +3,44 @@ cmpt-470-devnull-tech-eval
 
 Tech Evaluation demo site for CMPT470 SFU Fall 2012 Group 1: /dev/null/
 
+Deploying to Production
+---------------------------
+
+### Deploy by Script
+To deploy (master) to production, please follow the respective sections below by SSHing to our server:
+```shell
+    ssh cmpt470.csil.sfu.ca
+```
+
+Remember to SSH into our virtual server within the CMPT470 CSIL's server:
+```shell
+    ssh group1@mx1
+```
+
+Once logged in, please use the following to change directory to our server directory:
+```shell
+    cd /var/www/dev_scripts
+```
+
+Run the following script, you will be prompted for `sudo` to restart passenger at the end of the script:
+```shell
+    sh deploy.sh
+```
+
+The server should now be reset -- for a sanity check, please check http://cmpt470.csil.sfu.ca:8001 and visually verify if the changes has been pushed up.
+
+Cheers!
+
+### If the Server Fails to Deploy...
+Open up the `/dev_scripts/deploy.sh` file and execute the commands manually.
+
+And if some how passenger fails to restart, please run the following command on the server within `/var/www/`:
+```shell
+    sudo touch tmp/restart.txt
+```
+
+This will restart passenger, so please `touch` it as much as you like!
+
 Database
 ---------------------------
 
