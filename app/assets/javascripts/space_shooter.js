@@ -36,7 +36,7 @@ function reset() {
   projectileModel.boundHeight = 1;
   projectileModel.height = 1;
   projectileModel.color = [1.0, 1.0, 0.6];
-  projectileModel.loadModelFromJson("bullet");
+  projectileModel.loadModelFromAjax("bullet");
   projectileObstacles.push(projectileModel);
   scene.objects.push(obstacleModel);
 }
@@ -215,7 +215,7 @@ $(function() {
   //playerObject.rotateY = 100;
   playerObject.boundHeight = 0.5;
   playerObject.height = 0.5;
-  playerObject.loadModelFromJson("spaceship");
+  playerObject.loadModelFromAjax("spaceship");
 
   /*
   var run = playerObject.createAnimation();
@@ -254,7 +254,7 @@ $(function() {
     starModel.z = -4;
     starModel.y = Math.floor(Math.random()*100)+1;
     starModel.color = [1.0, 1.0, 0.6];
-    starModel.loadModelFromJson("star");
+    starModel.loadModelFromAjax("star");
     stars.push(starModel);
   }
 
@@ -268,7 +268,7 @@ $(function() {
     projectileModel.height = 1;
     playerObject.rotateY = 30;
     projectileModel.color = [1.0, 1.0, 0.6];
-    projectileModel.loadModelFromJson("bullet");
+    projectileModel.loadModelFromAjax("bullet");
     projectileObstacles.push(projectileModel);
   }
 

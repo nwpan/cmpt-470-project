@@ -81,7 +81,7 @@ GameObject.prototype.changeAnimation = function (id) {
   this.animations[this.currentAnimation].currentFrame = 0;
 };
 
-GameObject.prototype.loadModelFromJson = function (name) {
+GameObject.prototype.loadModelFromAjax = function (name) {
   var modelJson = "";
   var texture = "/assets/" + name + ".png";
   $.ajax({
@@ -95,11 +95,16 @@ GameObject.prototype.loadModelFromJson = function (name) {
       dataType: "json",
       async: false
   }); 
+  this.loadModelFromJson(modelJson, texture);
+};
+
+GameObject.prototype.loadModelFromJson = function (modelJson, texture) {
   modelJson = JSON.parse( modelJson );
   if(typeof modelJson.model != "undefined") {
     var positions = modelJson.model.position;
     var normals = modelJson.model.normal;
     var bindShape = modelJson.skeleton.bindShape;
+    var weights = new Float32Array(modelJson.model.skinWeights);
 
     for (var i = 0; i < positions.length; i+= 3) {
       var position = new Float32Array(4);
@@ -125,10 +130,17 @@ GameObject.prototype.loadModelFromJson = function (name) {
       normals[i+2] = boundNormal[2];
     };
 
+    for (var i = 0; i < positions.length; i+= 4) {
+      var weight = weights.subarray(i, i+4);
+      var normalizedWeight = new Float32Array(4);
+      tdl.fast.normalize(normalizedWeight, weight);
+      weights.set(normalizedWeight, i);
+    };
+
     var positions = new tdl.primitives.AttribBuffer(3, positions);
     var normals = new tdl.primitives.AttribBuffer(3, normals);
     var texCoords = new tdl.primitives.AttribBuffer(2, modelJson.model.texCoord);
-    var skinWeights = new tdl.primitives.AttribBuffer(4, modelJson.model.skinWeights);
+    var skinWeights = new tdl.primitives.AttribBuffer(4, weights);
     var skinJoints = new tdl.primitives.AttribBuffer(4, modelJson.model.skinJoints);
     var indices = new tdl.primitives.AttribBuffer(3, modelJson.model.indices, 'Uint16Array');
     var primitives = {
@@ -186,94 +198,9 @@ GameObject.prototype.loadModelFromJson = function (name) {
 }
 
 GameObject.prototype.loadModelFromInput = function (id) {
-  var modelJson = JSON.parse( $("input#" + id).val() );
+  var modelJson = $("input#" + id).val();
   var texture = "/assets/" + $("input#" + id).attr("title") + ".png";
-  if(typeof modelJson.model != "undefined") {
-
-    var positions = modelJson.model.position;
-    var normals = modelJson.model.normal;
-    var bindShape = modelJson.skeleton.bindShape;
-
-    for (var i = 0; i < positions.length; i+= 3) {
-      var position = new Float32Array(4);
-      position[0] = positions[i];
-      position[1] = positions[i+1];
-      position[2] = positions[i+2];
-      position[3] = 1;
-      var boundPosition = new Float32Array(4);
-      tdl.fast.mulMatrix4Vector(boundPosition, bindShape, position);
-      positions[i] = boundPosition[0];
-      positions[i+1] = boundPosition[1]; 
-      positions[i+2] = boundPosition[2];
-
-      var normal = new Float32Array(4);
-      normal[0] = normals[i];
-      normal[1] = normals[i+1];
-      normal[2] = normals[i+2];
-      normal[3] = 0;
-      var boundNormal = new Float32Array(4);
-      tdl.fast.mulMatrix4Vector(boundNormal, bindShape, normal);
-      normals[i] = boundNormal[0];
-      normals[i+1] = boundNormal[1]; 
-      normals[i+2] = boundNormal[2];
-    };
-
-    var positions = new tdl.primitives.AttribBuffer(3, positions);
-    var normals = new tdl.primitives.AttribBuffer(3, normals);
-    var texCoords = new tdl.primitives.AttribBuffer(2, modelJson.model.texCoord);
-    var skinWeights = new tdl.primitives.AttribBuffer(4, modelJson.model.skinWeights);
-    var skinJoints = new tdl.primitives.AttribBuffer(4, modelJson.model.skinJoints);
-    var indices = new tdl.primitives.AttribBuffer(3, modelJson.model.indices, 'Uint16Array');
-    var primitives = {
-      position: positions,
-      normal: normals,
-      texCoord: texCoords,
-      indices: indices,
-      skinJoints: skinJoints,
-      skinWeights: skinWeights
-    };
-    
-    var textures;
-
-    if (typeof texture == 'undefined' ) {
-      textures = { diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
-    } else {
-      textures = { diffuseSampler: tdl.textures.loadTexture(texture) };
-    }
-
-    var model = new tdl.models.Model(this.program, primitives, textures);
-    model.skeleton = modelJson.skeleton;
-    this.model = model;
-
-  } else {
-
-    var empty = new Float32Array(modelJson.indices.length*4);
-
-    var positions = new tdl.primitives.AttribBuffer(3, modelJson.position);
-    var normals = new tdl.primitives.AttribBuffer(3, modelJson.normal);
-    var texCoords = new tdl.primitives.AttribBuffer(2, modelJson.texCoord);
-    var skinWeights = new tdl.primitives.AttribBuffer(4, empty);
-    var skinJoints = new tdl.primitives.AttribBuffer(4, empty);
-    var indices = new tdl.primitives.AttribBuffer(3, modelJson.indices, 'Uint16Array');
-    var primitives = {
-      position: positions,
-      normal: normals,
-      texCoord: texCoords,
-      indices: indices,
-      skinJoints: skinJoints,
-      skinWeights: skinWeights};
-    
-    var textures;
-
-    if (typeof texture == 'undefined' ) {
-      textures = { diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
-    } else {
-      textures = { diffuseSampler: tdl.textures.loadTexture(texture) };
-    }
-
-    var model = new tdl.models.Model(this.program, primitives, textures);
-    this.model = model;
-  }
+  this.loadModelFromJson(modelJson, texture);
 }
 
 GameObject.prototype.setTexture = function(image_path) {

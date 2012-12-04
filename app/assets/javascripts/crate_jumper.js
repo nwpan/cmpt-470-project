@@ -191,7 +191,7 @@ $(function() {
   playerObject.y = 2.0;
   playerObject.rotateY = 100;
   playerObject.boundHeight = 1.3;
-  playerObject.loadModelFromJson("avatar");
+  playerObject.loadModelFromAjax("avatar");
   playerObject.animations.push(run);
   playerObject.animations.push(jump);
 
