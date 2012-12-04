@@ -26,6 +26,10 @@ Run the following script, you will be prompted for `sudo` to restart passenger a
     sh deploy.sh
 ```
 
+The server should now be reset -- for a sanity check, please check http://cmpt470.csil.sfu.ca:8001 and visually verify if the changes has been pushed up.
+
+Cheers!
+
 Database
 ---------------------------
 
