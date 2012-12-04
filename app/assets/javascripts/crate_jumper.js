@@ -88,12 +88,12 @@ function gameLoop() {
           },
           success: function(data)
           {
-            alert("POSTED. Check high score page...");
+            
           }
         });
         $("#canvas").hide();
         $("#game-over").removeClass("hidden");
-        $("#status").addClass("hidden").hide();;
+        $("#status").addClass("hidden").hide();
         $(".score").html(score);
         renderer.stopRender();
         clearInterval(runningLoop);
