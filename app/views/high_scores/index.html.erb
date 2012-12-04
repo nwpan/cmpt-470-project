@@ -1,10 +1,11 @@
 <h1>High Scores</h1>
 
-<%= link_to image_tag("cratejumper.jpg"), :tech_eval_demo_index %>
+<%= link_to image_tag("cratejumper.jpg"), :crate_jumper_game_index %>
 
 <% if @crate_jumper_high_scores.empty? %>
+   <br />
    No scores to show.
-
+   <br /><br />
 <% else %>
 
 <table class = "crate_jumper">
@@ -30,8 +31,9 @@
 <%= link_to image_tag("spaceshooter.jpg"), :space_shooter_game_index %>
 
 <% if @space_shooter_high_scores.empty? %>
-   No scores to show.
-
+  <br />
+  No scores to show.
+  <br /><br />
 <% else %>
 
 <table class = "space_shooter">

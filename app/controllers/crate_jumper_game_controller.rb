@@ -1,4 +1,4 @@
-class TechEvalDemoController < ApplicationController
+class CrateJumperGameController < ApplicationController
   def index
     if !signed_in?
         render :layout => "application_login"
