@@ -3,6 +3,29 @@ cmpt-470-devnull-tech-eval
 
 Tech Evaluation demo site for CMPT470 SFU Fall 2012 Group 1: /dev/null/
 
+Deploying to Production
+---------------------------
+
+To deploy (master) to production, please follow the respective sections below by SSHing to our server:
+```shell
+    ssh cmpt470.csil.sfu.ca
+```
+
+Remember to SSH into our virtual server within the CMPT470 CSIL's server:
+```shell
+    ssh group1@mx1
+```
+
+Once logged in, please use the following to change directory to our server directory:
+```shell
+    cd /www/var/dev_scripts
+```
+
+Run the following script, you will be prompted for `sudo` to restart passenger at the end of the script:
+```shell
+    sh deploy.sh
+```
+
 Database
 ---------------------------
 
