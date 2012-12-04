@@ -14,15 +14,20 @@ class UsersController < ApplicationController
   def wear
     @user = User.find(current_user.id)
     @item = Item.find(params[:id])
-    @user.hat = @item.id
-    @user.save!
+    if @item.item_type == "Hat"
+    	@user.hat = @item.id
+    	@user.save!
+    end
     redirect_to avatar_user_path(current_user.id)
   end
 
   def remove
     @user = User.find(current_user.id)
-    @user.hat = nil
-    @user.save!
+    @item = Item.find(params[:id])
+    if @item.item_type == "Hat"
+    	@user.hat = nil
+    	@user.save!
+    end
     redirect_to avatar_user_path(current_user.id)
   end
 

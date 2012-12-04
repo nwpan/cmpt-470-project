@@ -39,6 +39,10 @@ class ItemsController < ApplicationController
     @items = Item.where("item_type = ?", "Shoes").order("price ASC").page(params[:page])
   end
 
+  def showColours
+    @items = Item.where("item_type = ?", "Colour").order("name ASC").page(params[:page])
+  end
+
   # GET /items/1
   # GET /items/1.json
   def show

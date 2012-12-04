@@ -14,6 +14,11 @@ Item.create :name => "College Hat", :item_type => "Hat", :price => 1750, :descri
 Item.create :name => "Wide-Brimmed Hat", :item_type => "Hat", :price => 3000, :description => "Keep the sun out of your eyes.", :model_name => "wide-brimmed-hat"
 Item.create :name => "SFU Hat", :item_type => "Hat", :price => 6000, :description => "Show off your school pride.", :model_name => "sfu-hat"
 
+#Colours
+Item.create :name => "Red", :item_type => "Colour", :price => 500, :description => "", :model_name => ""
+Item.create :name => "Green", :item_type => "Colour", :price => 500, :description => "", :model_name => ""
+Item.create :name => "Blue", :item_type => "Colour", :price => 500, :description => "", :model_name => ""
+
 #Tops    
 Item.create :name => "Simple Shirt", :item_type => "Top", :price => 500, :description => "For service, wear with Simple Shoes."
 Item.create :name => "SFU Hoodie", :item_type => "Top", :price => 60000, :description => "A warm hoodie emblazoned with the SFU logo."
