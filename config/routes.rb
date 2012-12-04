@@ -48,6 +48,7 @@ App::Application.routes.draw do
     	get "showTops"
     	get "showBottoms"
     	get "showShoes"
+  	get "showColours"
     end
   end
 
