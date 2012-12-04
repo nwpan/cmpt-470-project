@@ -1,6 +1,6 @@
 <h1>High Scores</h1>
 
-<h3>Crate Jumper</h3>
+<%= link_to image_tag("cratejumper.jpg"), :tech_eval_demo_index %>
 
 <% if @crate_jumper_high_scores.empty? %>
    No scores to show.
@@ -27,7 +27,7 @@
 
 <br />
 
-<h3>Space Shooter</h3>
+<%= link_to image_tag("spaceshooter.jpg"), :space_shooter_game_index %>
 
 <% if @space_shooter_high_scores.empty? %>
    No scores to show.
