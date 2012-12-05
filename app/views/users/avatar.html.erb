@@ -11,7 +11,7 @@
 	    Empty
 	    <% end %></td>
 	<td><%= form_for @user do |f| %>
-	    <%= select_tag :colour1, options_for_select(["None", nil] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour1) %>
+	    <%= select_tag :colour1, options_for_select([["None", nil]] + 		@user_colours.collect{|u| [u.name, u.id] }, @user.colour1) %>
 	</td>
    </tr><tr>
 	<td>Bottom Colour:</td>
@@ -20,7 +20,7 @@
 	    <% else %>
 	    Empty
 	    <% end %></td>
-	<td><%= select_tag :colour2, options_for_select(["None", nil] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour2) %>
+	<td><%= select_tag :colour2, options_for_select([["None", nil]] +		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour2) %>
 	</td>
    </tr><tr>
 	<td>Shoe Colour:</td>
@@ -29,7 +29,7 @@
 	    <% else %>
 	    Empty
 	    <% end %></td>
-	<td><%= select_tag :colour3, options_for_select(["None", nil] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour3) %>
+	<td><%= select_tag :colour3, options_for_select([["None", nil]] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour3) %>
 	<%= f.submit "Update" %>
 	<% end %></td>
    </tr>
