@@ -18,21 +18,27 @@ Item.create :name => "SFU Hat", :item_type => "Hat", :price => 6000, :descriptio
 Item.create :name => "Red", :item_type => "Colour", :price => 500, :description => "", :red => 255, :green => 0, :blue => 0
 Item.create :name => "Green", :item_type => "Colour", :price => 500, :description => "", :red => 0, :green => 255, :blue => 0
 Item.create :name => "Blue", :item_type => "Colour", :price => 500, :description => "", :red => 0, :green => 0, :blue => 255
+Item.create :name => "Orange", :item_type => "Colour", :price => 500, :description => "", :red => 255, :green => 69, :blue => 0
+Item.create :name => "Yellow", :item_type => "Colour", :price => 500, :description => "", :red => 255, :green => 255, :blue => 0
+Item.create :name => "Purple", :item_type => "Colour", :price => 500, :description => "", :red => 160, :green => 32, :blue => 240
+Item.create :name => "Brown", :item_type => "Colour", :price => 500, :description => "", :red => 139, :green => 69, :blue => 19
+Item.create :name => "Black", :item_type => "Colour", :price => 500, :description => "", :red => 0, :green => 0, :blue => 0
+Item.create :name => "White", :item_type => "Colour", :price => 500, :description => "", :red => 255, :green => 255, :blue => 255
 
 #Tops    
-Item.create :name => "Simple Shirt", :item_type => "Top", :price => 500, :description => "For service, wear with Simple Shoes."
-Item.create :name => "SFU Hoodie", :item_type => "Top", :price => 60000, :description => "A warm hoodie emblazoned with the SFU logo."
-Item.create :name => "Dress Shirt", :item_type => "Top", :price => 35000, :description => "Look good. Feel awesome."
-Item.create :name => "Favourite Band T-Shirt", :item_type => "Top", :price => 7500, :description => "If you don't listen to Favourite Band, you're wrong."
+#Item.create :name => "Simple Shirt", :item_type => "Top", :price => 500, :description => "For service, wear with Simple Shoes."
+#Item.create :name => "SFU Hoodie", :item_type => "Top", :price => 60000, :description => "A warm hoodie emblazoned with the SFU logo."
+#Item.create :name => "Dress Shirt", :item_type => "Top", :price => 35000, :description => "Look good. Feel awesome."
+#Item.create :name => "Favourite Band T-Shirt", :item_type => "Top", :price => 7500, :description => "If you don't listen to Favourite Band, you're wrong."
 
 #Bottoms   
-Item.create :name => "Simple Jeans", :item_type => "Bottom", :price => 500, :description => "As simple as you can get."
-Item.create :name => "Track Pants", :item_type => "Bottom", :price => 10000, :description => "Beat the competition with these stylish pants."
-Item.create :name => "Skinny Jeans", :item_type => "Bottom", :price => 20000, :description => "With extra large pockets to hold your iPhone and your ego."
-Item.create :name => "Jeggings", :item_type => "Bottom", :price => 999999, :description => "But why?"
+#Item.create :name => "Simple Jeans", :item_type => "Bottom", :price => 500, :description => "As simple as you can get."
+#Item.create :name => "Track Pants", :item_type => "Bottom", :price => 10000, :description => "Beat the competition with these stylish pants."
+#Item.create :name => "Skinny Jeans", :item_type => "Bottom", :price => 20000, :description => "With extra large pockets to hold your iPhone and your ego."
+#Item.create :name => "Jeggings", :item_type => "Bottom", :price => 999999, :description => "But why?"
 
 #Shoes
-Item.create :name => "These Shoes!", :item_type => "Shoes", :price => 8888, :description => "They fit perfectly, yes!"
-Item.create :name => "Simple Shoes", :item_type => "Shoes", :price => 500, :description => "For those who just need something to cover their feet."
-Item.create :name => "Snazzy Sneakers", :item_type => "Shoes", :price => 25000, :description => "Yep, they're snazzy."
-Item.create :name => "Moon Boots", :item_type => "Shoes", :price => 100000, :description => "I'M A ROCKETMAN!"
+#Item.create :name => "These Shoes!", :item_type => "Shoes", :price => 8888, :description => "They fit perfectly, yes!"
+#Item.create :name => "Simple Shoes", :item_type => "Shoes", :price => 500, :description => "For those who just need something to cover their feet."
+#Item.create :name => "Snazzy Sneakers", :item_type => "Shoes", :price => 25000, :description => "Yep, they're snazzy."
+#Item.create :name => "Moon Boots", :item_type => "Shoes", :price => 100000, :description => "I'M A ROCKETMAN!"
