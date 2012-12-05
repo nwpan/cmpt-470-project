@@ -27,6 +27,17 @@ class UsersController < ApplicationController
     else
 	@user_colour3 = nil
     end
+  if @user.hat? && @user_items.exists?(@user.hat)
+    @user_hat = Item.find(@user.hat)
+  end
+
+    respond_to do |format|
+        format.json {
+              json = {'hat' => @user_hat.to_s, 'colour1' => [ @user_colour1.red, @user_colour1.green, @user_colour1.blue ], 'colour2' => [ @user_colour2.red, @user_colour2.green, @user_colour2.blue ], 'colour3' => [ @user_colour3.red, @user_colour3.green, @user_colour3.blue ]}
+              render :json => json.to_json
+        }
+        format.html
+    end
   end
 
   def wear
