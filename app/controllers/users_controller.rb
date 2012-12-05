@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
   def avatar
     @user = User.find(params[:id])
-    @user_items = @user.items.where("item_type != ?", "Colour").order("name ASC").page(params[:page])
+    @user_items = @user.items.order("name ASC").page(params[:page])
     @user_colours = @user_items.where("item_type = ?", "Colour").order("name ASC")
     #Check if the colour is in the user's inventory.
     if @user.colour1? && @user_items.exists?(@user.colour1)

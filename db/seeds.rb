@@ -15,9 +15,9 @@ Item.create :name => "Wide-Brimmed Hat", :item_type => "Hat", :price => 3000, :d
 Item.create :name => "SFU Hat", :item_type => "Hat", :price => 6000, :description => "Show off your school pride.", :model_name => "sfu-hat"
 
 #Colours
-Item.create :name => "Red", :item_type => "Colour", :price => 500, :description => "", :model_name => ""
-Item.create :name => "Green", :item_type => "Colour", :price => 500, :description => "", :model_name => ""
-Item.create :name => "Blue", :item_type => "Colour", :price => 500, :description => "", :model_name => ""
+Item.create :name => "Red", :item_type => "Colour", :price => 500, :description => "", :red => 255, :green => 0, :blue => 0
+Item.create :name => "Green", :item_type => "Colour", :price => 500, :description => "", :red => 0, :green => 255, :blue => 0
+Item.create :name => "Blue", :item_type => "Colour", :price => 500, :description => "", :red => 0, :green => 0, :blue => 255
 
 #Tops    
 Item.create :name => "Simple Shirt", :item_type => "Top", :price => 500, :description => "For service, wear with Simple Shoes."
