@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121202232111) do
+ActiveRecord::Schema.define(:version => 20121205044812) do
 
   create_table "high_scores", :force => true do |t|
     t.integer  "user_id"
@@ -49,9 +49,9 @@ ActiveRecord::Schema.define(:version => 20121202232111) do
     t.string   "remember_token"
     t.integer  "balance",         :default => 0
     t.integer  "hat"
-    t.float    "colour1"
-    t.float    "colour2"
-    t.float    "colour3"
+    t.integer  "colour1"
+    t.integer  "colour2"
+    t.integer  "colour3"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
