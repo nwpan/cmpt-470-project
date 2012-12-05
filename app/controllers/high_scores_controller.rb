@@ -46,7 +46,7 @@ class HighScoresController < ApplicationController
     @user = User.find(current_user.id)
     score = params[:high_score]
     if @user.new_score(params[:game], score)
-      @user.balance += (score.to_i / 500)*1000
+      @user.balance += (score.to_i / 100)*1000
       @user.save!
     end
   end

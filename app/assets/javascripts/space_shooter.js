@@ -21,13 +21,19 @@ function reset() {
   difficulty = 0;
   playerObject.x = -8;
   playerObject.y = 2.0;
-  scene.objects = [scene.objects[0], scene.objects[1], scene.objects[2]];
-  obstacles = {};
+  scene.objects = [scene.objects[0], scene.objects[1]];
+  obstacles = [];
+  stars = [];
+  projectileObstacles = [];
+
   obstacleModel = scene.createObject();
-  obstacleModel.y = Math.floor(Math.random()*7)+1;
-  obstacleModel.x = 100.0;
+  obstacleModel.y =  Math.floor(Math.random()*11);
+  obstacleModel.x = 300.0;
+  obstacleModel.width = 2.0;
+  obstacleModel.boundWidth = 3.0;
   obstacleModel.color = [1.0, 1.0, 0.6];
   obstacleModel.setTexture("assets/crate.jpg");
+
   obstacles.push(obstacleModel);
   projectileObstacles = {};
   projectileModel = scene.createObject();
@@ -39,6 +45,40 @@ function reset() {
   projectileModel.loadModelFromAjax("bullet");
   projectileObstacles.push(projectileModel);
   scene.objects.push(obstacleModel);
+  /*
+  var run = playerObject.createAnimation();
+  for(var i = 1; i <= 13; i++ ) {
+    run.addFrameFromJson("/run/charrun" + i.toString(), "assets/char.jpg");
+  }
+  run.speed = 0.5;
+  */
+  for (var i = 0; i < 10; i++)
+  {
+    starModel = scene.createObject();
+    starModel.width = 1.5;
+    starModel.height = 1.5;
+    starModel.x = Math.floor(Math.random()*100)+50;
+    starModel.z = -4;
+    starModel.y = Math.floor(Math.random()*100)+1;
+    starModel.color = [1.0, 1.0, 0.6];
+    starModel.loadModelFromJson("star");
+    stars.push(starModel);
+    scene.objects.push(starModel);
+  }
+
+
+  for (var i = 0; i < 10; i++)
+  {
+    projectileModel = scene.createObject();
+    projectileModel.width = 1.5;
+    projectileModel.boundWidth = 3.0;
+    projectileModel.boundHeight = 1;
+    projectileModel.height = 1;
+    projectileModel.color = [1.0, 1.0, 0.6];
+    projectileModel.loadModelFromJson("bullet");
+    projectileObstacles.push(projectileModel);
+    scene.objects.push(projectileModel);
+  }
 }
 var collision_detect = function(obj1, obj2) {
 	
@@ -217,15 +257,6 @@ $(function() {
   playerObject.height = 0.5;
   playerObject.loadModelFromAjax("spaceship");
 
-  /*
-  var run = playerObject.createAnimation();
-  for(var i = 1; i <= 13; i++ ) {
-    run.addFrameFromJson("/run/charrun" + i.toString(), "assets/char.jpg");
-  }
-  run.speed = 0.5;
-  */
-
-
   var floorObject = scene.createObject();
   floorObject.y = 0;
   floorObject.width = 1500.0;
@@ -243,8 +274,13 @@ $(function() {
   obstacleModel.setTexture("assets/crate.jpg");
 
   obstacles.push(obstacleModel);
-
-
+  /*
+  var run = playerObject.createAnimation();
+  for(var i = 1; i <= 13; i++ ) {
+    run.addFrameFromJson("/run/charrun" + i.toString(), "assets/char.jpg");
+  }
+  run.speed = 0.5;
+  */
   for (var i = 0; i < 10; i++)
   {
     starModel = scene.createObject();

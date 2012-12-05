@@ -39,7 +39,7 @@ App::Application.routes.draw do
   #match 'items/showHats', to: 'items#showHats'
   #match 'users/:id/avatar', to: 'users#avatar'
 
-  resources :items do
+  resources :items, :except => [:new, :create, :update, :delete, :edit] do
     member do
       get "purchase"
     end
