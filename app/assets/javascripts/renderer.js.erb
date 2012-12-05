@@ -77,7 +77,7 @@ function GameObject (program) {
   this.renderBounds = false;
 }
 
-GameObject.prototype.linkModel = function (model, boneName) {
+GameObject.prototype.linkModel = function (model, boneName, offset) {
   var boneId;
   for (var i = 0; i < this.model.skeleton.bones.length; i++) {
     if(this.model.skeleton.bones[i].sid.toLowerCase() == boneName.toLowerCase()) {
@@ -86,11 +86,11 @@ GameObject.prototype.linkModel = function (model, boneName) {
     }
   };
   if(typeof boneId != "undefined") {
-    this.linked[boneId] = model;
+    this.linked[boneId] = { "model":model, "offset": offset };
   }
 };
 
-GameObject.prototype.loadHatFromAjax = function (name) {
+GameObject.prototype.loadPropFromAjax = function (name, location, offset) {
   var modelJson = "";
   var texture = "/assets/" + name + ".png";
   $.ajax({
@@ -104,7 +104,7 @@ GameObject.prototype.loadHatFromAjax = function (name) {
       dataType: "json",
       async: false
   }); 
-  this.linkModel(this.loadModelFromJson(modelJson, texture), "head");
+  this.linkModel(this.loadModelFromJson(modelJson, texture), location, offset);
 };
 
 GameObject.prototype.changeAnimation = function (id) {
@@ -360,18 +360,20 @@ GameObject.prototype.draw = function(view, projection) {
     }
     var bones = this.setPose(currentFrame);
     
-    this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp, "hasSkeleton" : true, "linked" : false, "bones": bones});
+    this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "color1": [1.0, 0.0, 0.0], "color2": [0.0, 0.0, 1.0], "color3": [0.0, 1.0, 0.0], "mvp": mvp, "colorize": true, "hasSkeleton" : true, "linked" : false, "bones": bones});
     for(var linked in this.linked) {
       var bonePosition = new Float32Array(this.getBoneTransform(currentFrame, parseInt(linked)));
       tdl.fast.transpose4(bonePosition, bonePosition);
       var offset = new Float32Array(16);
       tdl.fast.identity4(offset);
-      tdl.fast.matrix4.translate(offset, [0, 3, 0]);
-      this.linked[linked].drawPrep();
-      this.linked[linked].draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp, "hasSkeleton" : true, "linked" : true, "bonePosition": bonePosition, "offset": offset});
+      if(typeof this.linked[linked].offset != "undefined") {
+        tdl.fast.matrix4.translate(offset, this.linked[linked].offset);
+      }
+      this.linked[linked].model.drawPrep();
+      this.linked[linked].model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp, "colorize": false, "hasSkeleton" : true, "linked" : true, "bonePosition": bonePosition, "offset": offset});
     }
   } else {
-    this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp, "hasSkeleton" : false});
+    this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp, "colorize": false, "hasSkeleton" : false});
   }
 
   if(this.renderBounds) {

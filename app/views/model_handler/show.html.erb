@@ -55,6 +55,11 @@
 	precision mediump float;
 
 	uniform sampler2D diffuseSampler;
+	uniform bool colorize;
+	uniform vec3 color1;
+	uniform vec3 color2;
+	uniform vec3 color3;
+
 
 	varying vec3 v_normal;
 	varying vec3 v_position;
@@ -72,17 +77,29 @@
 	         vec4(1.0, 1.0, 1.0, 1.0)
 	         );
 
-	struct material
-	{
-	    vec4 diffuse;
-	};
 
 	void main(void) {
-		material mymaterial = material(texture2D(diffuseSampler, v_texCoord) * vec4(v_color, 1.0));
+		vec3 texture = vec3(texture2D(diffuseSampler, v_texCoord));
+		vec3 color;
+
+		if(colorize) {
+			if(texture.x > texture.y*1.1 && texture.x > texture.z*1.1) {
+				color = vec3(texture.x) * color1;
+			} else if(texture.y > texture.x*1.1 && texture.y > texture.z*1.1) {
+				color = vec3(texture.y) * color2;
+			} else if(texture.z > texture.x*1.1 && texture.z > texture.y*1.1) {
+				color = vec3(texture.z) * color3;
+			} else {
+				color = vec3(texture.x) * vec3(1.0, 0.9, 0.8);
+			}
+		} else {
+			color = texture * v_color;
+		}
+
 	    vec3 normalDirection = normalize(v_normal);
 	    vec3 lightDirection = normalize(vec3(light0.position));
 	    vec3 diffuseReflection
-	    = vec3(light0.diffuse) * vec3(mymaterial.diffuse)
+	    = vec3(light0.diffuse) * vec3(color)
 	    * max(0.0, dot(normalDirection, lightDirection));
 	    
 	    gl_FragColor = vec4(diffuseReflection, 1.0);

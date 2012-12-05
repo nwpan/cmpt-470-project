@@ -194,7 +194,8 @@ $(function() {
   playerObject.loadModelFromAjax("avatar");
   playerObject.animations.push(run);
   playerObject.animations.push(jump);
-  playerObject.loadHatFromAjax("santa-hat");
+  playerObject.loadPropFromAjax("santa-hat", "head", [0, 3, 0]);
+  playerObject.loadPropFromAjax("sword", "hand_r");
 
 
   var testObject3 = testScene.createObject();
