@@ -29,7 +29,7 @@
   <tr>
     <td>
     <% if item.item_type == "Colour" %>
-	<div style = "width:90; height:90; background-color:rgb(<%= item.red %>, <%= item.green %>, <%= item.blue %>)"></div>
+	<div style = "width:90px; height:90px; background-color:rgb(<%= item.red %>, <%= item.green %>, <%= item.blue %>)"></div>
     <% else %>
        <% if item.model_name? %>
        <iframe src="/model_handler/show.html?model=<%= item.model_name%>" width="90" height="90" scrolling="no" frameBorder="0" >Browser not compatible.</iframe>
