@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121205044812) do
+ActiveRecord::Schema.define(:version => 20121205204617) do
 
   create_table "high_scores", :force => true do |t|
     t.integer  "user_id"
@@ -34,8 +34,11 @@ ActiveRecord::Schema.define(:version => 20121205044812) do
     t.integer  "price"
     t.string   "model_name"
     t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+    t.float    "red",         :default => 0.0
+    t.float    "green",       :default => 0.0
+    t.float    "blue",        :default => 0.0
   end
 
   create_table "users", :force => true do |t|
