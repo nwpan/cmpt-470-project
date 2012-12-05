@@ -185,16 +185,14 @@ $(function() {
   jump.speed = 0.8;
   
 
-  playerObject = testScene.createObject();
+  playerObject = testScene.createAvatar($('#user_id').val());
   playerObject.z = -4.0;
   playerObject.x = -5;
   playerObject.y = 2.0;
   playerObject.rotateY = 100;
   playerObject.boundHeight = 1.3;
-  playerObject.loadModelFromAjax("avatar");
   playerObject.animations.push(run);
   playerObject.animations.push(jump);
-  playerObject.loadPropFromAjax("santa-hat", "head", [0, 3, 0]);
   playerObject.loadPropFromAjax("sword", "hand_r");
 
 

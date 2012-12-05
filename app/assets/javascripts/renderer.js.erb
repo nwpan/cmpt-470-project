@@ -30,6 +30,31 @@ Scene.prototype.createObject = function() {
   return object;
 }
 
+Scene.prototype.createAvatar = function(userId) {
+  var avatarJson = "";
+  $.ajax({
+      url: '/users/' + userId + '/avatar.json',
+      type: 'GET',
+      success: function (data) {
+        avatarJson = data;
+      },
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      async: false
+  });
+  var object = new GameObject(this.program);
+  object.loadModelFromAjax("avatar");
+  if(typeof avatarJson.hat != "undefined") {
+    object.loadPropFromAjax(avatarJson.hat, "head", [0, 2.7, 0.1]);
+  }
+  object.color1 = avatarJson.colour1;
+  object.color2 = avatarJson.colour2;
+  object.color3 = avatarJson.colour3;
+  console.log(object);
+  this.objects.push(object);
+  return object;
+}
+
 function Animation (start, end) {
   this.start = start;
   this.end = end;
@@ -94,7 +119,7 @@ GameObject.prototype.loadPropFromAjax = function (name, location, offset) {
   var modelJson = "";
   var texture = "/assets/" + name + ".png";
   $.ajax({
-      url: 'model_handler/show.json',
+      url: '/model_handler/show.json',
       data: { model:name },
       type: 'GET',
       success: function (data) {
@@ -116,7 +141,7 @@ GameObject.prototype.loadModelFromAjax = function (name) {
   var modelJson = "";
   var texture = "/assets/" + name + ".png";
   $.ajax({
-      url: 'model_handler/show.json',
+      url: '/model_handler/show.json',
       data: { model:name },
       type: 'GET',
       success: function (data) {
@@ -359,8 +384,23 @@ GameObject.prototype.draw = function(view, projection) {
       currentFrame = this.animations[this.currentAnimation].getFrame();
     }
     var bones = this.setPose(currentFrame);
+    var color1 = [1.0, 0.0, 0.0];
+    var color2 = [0.0, 0.0, 1.0];
+    var color3 = [0.0, 1.0, 0.0];
+
+    if(typeof this.color1 != "undefined") {
+      color1 = this.color1;
+    }
+
+    if(typeof this.color2 != "undefined") {
+      color2 = this.color2;
+    }
+
+    if(typeof this.color3 != "undefined") {
+      color3 = this.color3;
+    }
     
-    this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "color1": [1.0, 0.0, 0.0], "color2": [0.0, 0.0, 1.0], "color3": [0.0, 1.0, 0.0], "mvp": mvp, "colorize": true, "hasSkeleton" : true, "linked" : false, "bones": bones});
+    this.model.draw({"transform": this.transform, "transformInv": transformInv, "color1": color1, "color2": color2, "color3": color3, "mvp": mvp, "colorize": true, "hasSkeleton" : true, "linked" : false, "bones": bones});
     for(var linked in this.linked) {
       var bonePosition = new Float32Array(this.getBoneTransform(currentFrame, parseInt(linked)));
       tdl.fast.transpose4(bonePosition, bonePosition);
@@ -417,7 +457,6 @@ function Renderer(canvas) {
   this.gl.depthMask(true);
   this.color = [0.1,0.1,0.1];
   this.gl.clearDepth(1);
-  this.gl.enable(this.gl.CULL_FACE);
   this.gl.enable(this.gl.DEPTH_TEST);
 }
 

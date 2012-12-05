@@ -1,8 +1,8 @@
 <h1>Avatar</h1>
 
-<iframe src = "/model_handler/show.html?model=avatar" width = 300 height = 300 scrolling = "no" frameBorder="0" >Browser not compatible.</iframe>
+<iframe src = "/model_handler/show.html?model=avatar" width = 400 height = 400 scrolling = "no" frameBorder="0">Browser not compatible.</iframe>
 
-<table class = "colours">
+<table class = "colours" style="display:inline-block">
    <tr>
 	<td>Colour 1:</td>
 	<td><% if @user_colour1 != nil %>
@@ -29,9 +29,10 @@
 	    <% else %>
 	    Empty
 	    <% end %></td>
-	<td><%= select_tag :colour3, options_for_select(["None", nil] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour3) %>
-	<%= f.submit "Update" %>
-	<% end %></td>
+	<td><%= select_tag :colour3, options_for_select(["None", nil] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour3) %></td>
+   </tr>
+   <tr>
+   	<td><%= f.submit "Update" %><% end %></td>
    </tr>
 </table>
 

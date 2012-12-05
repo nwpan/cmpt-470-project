@@ -27,13 +27,27 @@ class UsersController < ApplicationController
     else
 	@user_colour3 = nil
     end
+  @user_hat = nil
   if @user.hat? && @user_items.exists?(@user.hat)
     @user_hat = Item.find(@user.hat)
   end
 
     respond_to do |format|
         format.json {
-              json = {'hat' => @user_hat.to_s, 'colour1' => [ @user_colour1.red, @user_colour1.green, @user_colour1.blue ], 'colour2' => [ @user_colour2.red, @user_colour2.green, @user_colour2.blue ], 'colour3' => [ @user_colour3.red, @user_colour3.green, @user_colour3.blue ]}
+              json = {}
+              if(@user_hat)
+                json["hat"] = @user_hat.model_name
+              end
+              if(@user_colour1)
+                json["colour1"] = [ @user_colour1.red/255, @user_colour1.green/255, @user_colour1.blue/255 ]
+              end
+              if(@user_colour2)
+                json["colour2"] = [ @user_colour2.red/255, @user_colour2.green/255, @user_colour2.blue/255 ]
+              end
+              if(@user_colour3)
+                json["colour3"] = [ @user_colour3.red/255, @user_colour3.green/255, @user_colour3.blue/255 ]
+              end
+              
               render :json => json.to_json
         }
         format.html
