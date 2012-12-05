@@ -2,6 +2,29 @@
 
 <iframe src = "/model_handler/show.html?model=avatar" width = 300 height = 300 scrolling = "no" frameBorder="0" >Browser not compatible.</iframe>
 
+<table class = "colours">
+   <tr>
+	<td>Colour 1:</td>
+	<td><%= @user_colour1 %></td>
+	<td><%= form_for @user do |f| %>
+	   <%= select_tag :colour1, options_for_select(["None", nil] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour1) %>
+	</td>
+   </tr><tr>
+	<td>Colour 2:</td>
+	<td><%= @user_colour2 %></td>
+	<td><%= select_tag :colour2, options_for_select(["None", nil] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour2) %>
+	</td>
+   </tr><tr>
+	<td>Colour 3:</td>
+	<td><%= @user_colour3 %></td>
+	<td><%= select_tag :colour3, options_for_select(["None", nil] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour3) %>
+	<%= f.submit "Update" %>
+	<% end %></td>
+   </tr>
+</table>
+
+
+
 <h4>Inventory</h4>
 
 <% if @user_items.empty? %>

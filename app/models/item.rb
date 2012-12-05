@@ -3,4 +3,5 @@ class Item < ActiveRecord::Base
 
   has_many :user, :through => :inventory
   paginates_per 6
+  COLOURS = ["Red", "Blue", "Green"]
 end
