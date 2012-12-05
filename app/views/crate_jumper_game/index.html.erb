@@ -26,10 +26,13 @@
 
 	uniform mat4 transform;
 	uniform mat4 mvp;
+	uniform mat4 bonePosition;
+	uniform mat4 offset;
 	uniform mat4 transformInv;
 	uniform vec3 color;
 
 	uniform bool hasSkeleton;
+	uniform bool linked;
 
 	uniform mat4 bones[64];
 
@@ -44,11 +47,15 @@
     	vec4 vertPosition;
 
     	if(hasSkeleton) {
-    		normalize(skinWeights);
-	    	mat4 skinningMat = skinWeights.x * bones[int(skinJoints.x)];
-	    	skinningMat += skinWeights.y * bones[int(skinJoints.y)];
-	    	skinningMat += skinWeights.z * bones[int(skinJoints.z)];
-	    	skinningMat += skinWeights.w * bones[int(skinJoints.w)];
+    		mat4 skinningMat;
+    		if(linked) {
+    			skinningMat =   bonePosition * offset;
+    		} else {
+		    	skinningMat = skinWeights.x * bones[int(skinJoints.x)];
+		    	skinningMat += skinWeights.y * bones[int(skinJoints.y)];
+		    	skinningMat += skinWeights.z * bones[int(skinJoints.z)];
+		    	skinningMat += skinWeights.w * bones[int(skinJoints.w)];
+		    }
 
 	    	v_normal = normalize(vec3(transformInv * (skinningMat * vec4(normal, 0.0))));
 	    	vertPosition = mvp * (skinningMat * vec4(position, 1));
