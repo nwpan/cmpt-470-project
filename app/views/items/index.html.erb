@@ -7,9 +7,6 @@
 	   <li><b><%= link_to 'Everything', items_path %></b></li>
 	   <li><%= link_to 'Hats', :showHats_items %></li>
 	   <li><%= link_to 'Colours', :showColours_items %></li>
-	   <li><%= link_to 'Tops', :showTops_items %></li>
-	   <li><%= link_to 'Bottoms', :showBottoms_items %></li>
-	   <li><%= link_to 'Shoes', :showShoes_items %></li>
 	</ul>
 </div>
 
@@ -28,11 +25,13 @@
 <% @items.each do |item| %>
   <tr>
     <td>
-	<div class="image">
-    <% if item.model_name? %>
-    <iframe src="/model_handler/show.html?model=<%= item.model_name%>" width="90" height="90" scrolling="no" frameBorder="0" >Browser not compatible.</iframe>
+    <% if item.item_type == "Colour" %>
+	<div style = "width:90px; height:90px; background-color:rgb(<%= item.red %>, <%= item.green %>, <%= item.blue %>)"></div>
+    <% else %>
+       <% if item.model_name? %>
+       <iframe src="/model_handler/show.html?model=<%= item.model_name%>" width="90" height="90" scrolling="no" frameBorder="0" >Browser not compatible.</iframe>
+       <% end %>
     <% end %>
-	</div>
     </td>
     <td><%= link_to item.name, item %><br> Type: <%= item.item_type %><br>Price: <%= item.price %><br><%= item.description %></td>
     <td>
