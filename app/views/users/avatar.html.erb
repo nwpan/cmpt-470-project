@@ -4,7 +4,7 @@
 
 <table class = "colours">
    <tr>
-	<td>Colour 1:</td>
+	<td>Top Colour:</td>
 	<td><% if @user_colour1 != nil %>
 	    <%= @user_colour1.name %>
 	    <% else %>
@@ -14,7 +14,7 @@
 	    <%= select_tag :colour1, options_for_select(["None", nil] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour1) %>
 	</td>
    </tr><tr>
-	<td>Colour 2:</td>
+	<td>Bottom Colour:</td>
 	<td><% if @user_colour2 != nil %>
 	    <%= @user_colour2.name %>
 	    <% else %>
@@ -23,7 +23,7 @@
 	<td><%= select_tag :colour2, options_for_select(["None", nil] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour2) %>
 	</td>
    </tr><tr>
-	<td>Colour 3:</td>
+	<td>Shoe Colour:</td>
 	<td><% if @user_colour3 != nil %>
 	    <%= @user_colour3.name %>
 	    <% else %>
@@ -51,6 +51,7 @@
     <th>Options</th>
   	</tr>
 <% @user_items.each do |item| %>
+<% if item.item_type != "Colour" %>
 	<tr>
 		<td>
 		   <div class = "image">
@@ -61,12 +62,13 @@
 		</td>
 		<td><%= item.name %></td>
 		<td><%= item.item_type %></td>
-		<% if item.item_type == "Hat" || item.item_type == "Colour" %>
+		<% if item.item_type == "Hat" %>
 		   <td><%= link_to "Wear", wear_user_path(item) %> &nbsp;&nbsp;&nbsp; <%= link_to "Remove", remove_user_path(item) %> </td>
 		<% else %>
 		   <td>This item is not yet equippable. </td>
 		<% end %>
 	</tr>
+<% end %>
 <% end %>
 </table>
 <% end %>
