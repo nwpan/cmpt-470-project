@@ -13,6 +13,11 @@
    </tr>
 </table>
 
+<%= form_for @user do |f| %>
+   <%= select_tag :colour, options_for_select(@user_colours.collect{ |u| [u.name, u.id] }) %>
+<%= f.submit "Update" %>
+<% end %>
+
 <h4>Inventory</h4>
 
 <% if @user_items.empty? %>

@@ -4,12 +4,13 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @user_items = @user.items.order("name ASC").page(params[:page])
-    @user_colours = @user.items.where("item_type = ?", "Colour").order("name ASC")
+    @user_colours = @user_items.where("item_type = ?", "Colour").order("name ASC")
   end
 
   def avatar
     @user = User.find(params[:id])
     @user_items = @user.items.order("name ASC").page(params[:page])
+    @user_colours = @user_items.where("item_type = ?", "Colour").order("name ASC")
   end
 
   def wear
@@ -30,6 +31,10 @@ class UsersController < ApplicationController
     	@user.save!
     end
     redirect_to avatar_user_path(current_user.id)
+  end
+
+  def update
+  
   end
 
   def new
