@@ -29,7 +29,7 @@
 	    <% else %>
 	    None
 	    <% end %></td>
-	<td><%= select_tag :colour3, options_for_select(["None", nil] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour3) %></td>
+	<td><%= select_tag :colour3, options_for_select([["None", nil]] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour3) %></td>
    </tr>
    <tr>
    	<td><%= f.submit "Update" %><% end %></td>
