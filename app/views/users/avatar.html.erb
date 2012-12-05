@@ -6,9 +6,9 @@
    <tr>
 	<td>Top Colour:</td>
 	<td><% if @user_colour1 != nil %>
-	    <%= @user_colour1.name %>
+	    	<div style = "width:50px; height:50px; background-color:rgb(<%= @user_colour1.red %>, <%= @user_colour1.green %>, <%= @user_colour1.blue %>)"></div>
 	    <% else %>
-	    Empty
+	    None
 	    <% end %></td>
 	<td><%= form_for @user do |f| %>
 	    <%= select_tag :colour1, options_for_select([["None", nil]] + 		@user_colours.collect{|u| [u.name, u.id] }, @user.colour1) %>
@@ -16,18 +16,18 @@
    </tr><tr>
 	<td>Bottom Colour:</td>
 	<td><% if @user_colour2 != nil %>
-	    <%= @user_colour2.name %>
+	    	<div style = "width:50px; height:50px; background-color:rgb(<%= @user_colour2.red %>, <%= @user_colour2.green %>, <%= @user_colour2.blue %>)"></div>
 	    <% else %>
-	    Empty
+	    None
 	    <% end %></td>
 	<td><%= select_tag :colour2, options_for_select([["None", nil]] +		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour2) %>
 	</td>
    </tr><tr>
 	<td>Shoe Colour:</td>
 	<td><% if @user_colour3 != nil %>
-	    <%= @user_colour3.name %>
+	    	<div style = "width:50px; height:50px; background-color:rgb(<%= @user_colour3.red %>, <%= @user_colour3.green %>, <%= @user_colour3.blue %>)"></div>
 	    <% else %>
-	    Empty
+	    None
 	    <% end %></td>
 	<td><%= select_tag :colour3, options_for_select(["None", nil] + 		@user_colours.collect{ |u| [u.name, u.id] }, @user.colour3) %></td>
    </tr>
@@ -61,13 +61,17 @@
 		   <% end %>
 		   </div>
 		</td>
-		<td><%= item.name %></td>
+		<td><% if @user.hat == item.id %>
+			<b><%= item.name %></b>
+		    <% else %>
+			<%= item.name %>
+		    <% end %></td>
 		<td><%= item.item_type %></td>
-		<% if item.item_type == "Hat" %>
-		   <td><%= link_to "Wear", wear_user_path(item) %> &nbsp;&nbsp;&nbsp; <%= link_to "Remove", remove_user_path(item) %> </td>
-		<% else %>
-		   <td>This item is not yet equippable. </td>
-		<% end %>
+		<td><% if @user.hat == item.id %>
+			<%= link_to "Remove", remove_user_path(item) %>
+		    <% else %>
+			<%= link_to "Wear", wear_user_path(item) %>
+		    <% end %></td>
 	</tr>
 <% end %>
 <% end %>
