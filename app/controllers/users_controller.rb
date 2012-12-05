@@ -11,14 +11,21 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @user_items = @user.items.order("name ASC").page(params[:page])
     @user_colours = @user_items.where("item_type = ?", "Colour").order("name ASC")
-    if @user.colour1?    
+    #Check if the colour is in the user's inventory.
+    if @user.colour1? && @user_items.exists?(@user.colour1)
 	@user_colour1 = Item.find(@user.colour1)
+    else
+	@user_colour1 = nil
     end
-    if @user.colour2?
+    if @user.colour2? && @user_items.exists?(@user.colour2)
     	@user_colour2 = Item.find(@user.colour2)
+    else
+	@user_colour2 = nil
     end
-    if @user.colour3?
+    if @user.colour3? && @user_items.exists?(@user.colour3)
     	@user_colour3 = Item.find(@user.colour3)
+    else
+	@user_colour3 = nil
     end
   end
 

@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-    attr_accessible :email, :first_name, :last_name, :password, :password_confirmation, :balance
+    attr_accessible :email, :first_name, :last_name, :password, :password_confirmation, :balance, :hat, :colour1, :colour2, :colour3
     has_secure_password
 
     before_create { |user| user.email = email.downcase }
@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
     has_many :inventory
     has_many :items, :through => :inventory
     has_many :high_score
+    
     def skip_validation
         true
     end
