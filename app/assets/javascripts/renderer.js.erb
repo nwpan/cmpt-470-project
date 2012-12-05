@@ -58,6 +58,7 @@ function GameObject (program) {
   this.program = program;
   this.model = model;
   this.animations = [];
+  this.linked = {};
   this.currentAnimation = 0;
   this.x = 0.0;
   this.y = 0.0;
@@ -75,6 +76,36 @@ function GameObject (program) {
   this.color = [1.0, 1.0, 1.0];
   this.renderBounds = false;
 }
+
+GameObject.prototype.linkModel = function (model, boneName) {
+  var boneId;
+  for (var i = 0; i < this.model.skeleton.bones.length; i++) {
+    if(this.model.skeleton.bones[i].sid.toLowerCase() == boneName.toLowerCase()) {
+      boneId = i;
+      break;
+    }
+  };
+  if(typeof boneId != "undefined") {
+    this.linked[boneId] = model;
+  }
+};
+
+GameObject.prototype.loadHatFromAjax = function (name) {
+  var modelJson = "";
+  var texture = "/assets/" + name + ".png";
+  $.ajax({
+      url: 'model_handler/show.json',
+      data: { model:name },
+      type: 'GET',
+      success: function (data) {
+        modelJson = data;
+      },
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      async: false
+  }); 
+  this.linkModel(this.loadModelFromJson(modelJson, texture), "head");
+};
 
 GameObject.prototype.changeAnimation = function (id) {
   this.currentAnimation = id;
@@ -95,7 +126,7 @@ GameObject.prototype.loadModelFromAjax = function (name) {
       dataType: "json",
       async: false
   }); 
-  this.loadModelFromJson(modelJson, texture);
+  this.model = this.loadModelFromJson(modelJson, texture);
 };
 
 GameObject.prototype.loadModelFromJson = function (modelJson, texture) {
@@ -162,7 +193,12 @@ GameObject.prototype.loadModelFromJson = function (modelJson, texture) {
 
     var model = new tdl.models.Model(this.program, primitives, textures);
     model.skeleton = modelJson.skeleton;
-    this.model = model;
+    return model;
+
+    // var cube = tdl.primitives.createCube(0.5);
+
+    // var hatModel = new tdl.models.Model(this.program, cube, textures);
+    // this.linkModel(hatModel, "Head");
 
   } else {
 
@@ -191,7 +227,7 @@ GameObject.prototype.loadModelFromJson = function (modelJson, texture) {
     }
 
     var model = new tdl.models.Model(this.program, primitives, textures);
-    this.model = model;
+    return model;
 
   }
   
@@ -200,7 +236,7 @@ GameObject.prototype.loadModelFromJson = function (modelJson, texture) {
 GameObject.prototype.loadModelFromInput = function (id) {
   var modelJson = $("input#" + id).val();
   var texture = "/assets/" + $("input#" + id).attr("title") + ".png";
-  this.loadModelFromJson(modelJson, texture);
+  this.model = this.loadModelFromJson(modelJson, texture);
 }
 
 GameObject.prototype.setTexture = function(image_path) {
@@ -225,9 +261,9 @@ GameObject.prototype.setPose = function(frame) {
   return bones;
 };
 
-GameObject.prototype.processBone = function(boneSource, bones, frame, boneId, parentId) {
+GameObject.prototype.getTransformForFrame = function(keyFrames, frame) {
   var maxFrame = this.model.skeleton.totalFrames;
-  var keyFrames = boneSource[boneId].keyFrames;
+
   var prevFrame = 0;
   var nextFrame = maxFrame;
   var exact = false;
@@ -268,7 +304,13 @@ GameObject.prototype.processBone = function(boneSource, bones, frame, boneId, pa
       transform[i] = firstTransform[i] + nextTransform[i];
     };
   }
+  return transform;
+};
 
+GameObject.prototype.processBone = function(boneSource, bones, frame, boneId, parentId) {
+  
+  var keyFrames = boneSource[boneId].keyFrames;
+  var transform = this.getTransformForFrame(keyFrames, frame);
 
   if(typeof parentId != "undefined") {
     var parent = bones.subarray(parentId*16, (parentId+1)*16);
@@ -284,6 +326,14 @@ GameObject.prototype.processBone = function(boneSource, bones, frame, boneId, pa
     this.processBone(boneSource, bones, frame, boneSource[boneId].children[i], boneId);
   };
 
+};
+
+GameObject.prototype.getBoneTransform = function(frame, id) {
+  var boneSource = this.model.skeleton.bones;
+  var bones = new Float32Array(64*16);
+  this.processBone(boneSource, bones, frame, 0);
+
+  return bones.subarray(id*16, (id+1)*16);;
 };
   
 GameObject.prototype.draw = function(view, projection) {
@@ -310,7 +360,16 @@ GameObject.prototype.draw = function(view, projection) {
     }
     var bones = this.setPose(currentFrame);
     
-    this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp, "hasSkeleton" : true, "bones": bones});
+    this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp, "hasSkeleton" : true, "linked" : false, "bones": bones});
+    for(var linked in this.linked) {
+      var bonePosition = new Float32Array(this.getBoneTransform(currentFrame, parseInt(linked)));
+      tdl.fast.transpose4(bonePosition, bonePosition);
+      var offset = new Float32Array(16);
+      tdl.fast.identity4(offset);
+      tdl.fast.matrix4.translate(offset, [0, 3, 0]);
+      this.linked[linked].drawPrep();
+      this.linked[linked].draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp, "hasSkeleton" : true, "linked" : true, "bonePosition": bonePosition, "offset": offset});
+    }
   } else {
     this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "mvp": mvp, "hasSkeleton" : false});
   }
