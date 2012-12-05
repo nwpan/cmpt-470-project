@@ -1,10 +1,14 @@
 <h1><%= "#{@user.first_name} #{@user.last_name}'s Profile" %></h1>
+<% if @user.id == current_user.id %>
 Welcome, <%= @user.first_name %>!<br />
+<% end %>
 <br />
 First Name: <%= @user.first_name %><br />
 Last Name: <%= @user.last_name %><br />
+<% if @user.id == current_user.id %>
 Email: <%= @user.email %><br />
 Balance (in credits): <%= @user.balance %><br />
+<% end %>
 <h4>Inventory</h4>
 
 <% if @user_items.empty? %>
@@ -16,13 +20,18 @@ Balance (in credits): <%= @user.balance %><br />
     <th>Name</th>
     <th>Type</th>
     <th>Credit Price</th>
+<% if @user.id == current_user.id %>
+    <th>&nbsp;</td>
+<% end %>
   	</tr>
 <% @user_items.each do |item| %>
 	<tr>
 		<td><%= item.name %></td>
 		<td><%= item.item_type %></td>
 		<td><%= item.price %></td>
+<% if @user.id == current_user.id %>
 		<td><%= link_to "Delete", inventory_path(item.id), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+<% end %>
 	</tr>
 <% end %>
 </table>
