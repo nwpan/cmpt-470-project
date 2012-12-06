@@ -93,7 +93,7 @@ $(function() {
             }
           });
           $("#canvas").hide();
-          $("#game-over").removeClass("hidden");
+          $("#game-over").removeClass("hidden").css("-webkit-transform", "scale3d(1,1,1)");
           $("#status").addClass("hidden").hide();
           $(".score").html(score);
           renderer.stopRender();
