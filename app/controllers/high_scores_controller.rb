@@ -49,6 +49,7 @@ class HighScoresController < ApplicationController
     if @user.new_score(params[:game], score)
       @user.balance += (score.to_i / 100)*1000
       @user.save!
+      render text: @user.balance
     end
   end
 

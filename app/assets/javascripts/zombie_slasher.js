@@ -214,7 +214,7 @@ $(function() {
             },
             success: function(data)
             {
-              
+              $("#credits a").html("Credits: " + data);
             }
           });
           $("#canvas").hide();
