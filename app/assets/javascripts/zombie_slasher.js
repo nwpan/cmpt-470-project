@@ -40,6 +40,13 @@ var generateZombie = function() {
     var zombieRun = new Animation(252, 351);
     zombieRun.speed = 0.8;
     zombie.animations.push(zombieRun);
+    var zombieDie = new Animation(354, 397);
+    zombieDie.loop = false;
+    zombie.animations.push(zombieDie);
+    var zombieRevive = new Animation(399, 462);
+    zombieRevive.loop = false;
+    zombie.animations.push(zombieRevive);
+    zombie.dead = false;
     zombie.skinColor = [0.7, 1.0, 0.5];
     zombies.push(zombie);
   } else {
@@ -85,10 +92,40 @@ var collision_detect = function(obj1, obj2) {
 
 function gameLoop() {
 	//game logic here
-  if(timer % 600 === 0) {
+  if(timer % 300 === 0) {
       generateZombie();
+
+    for(var zombie in zombies) {
+      zombie = zombies[zombie];
+      if(zombie.dead) {
+        var chance = score / 10000;
+        if(chance < 0.01) {
+          chance = 0.01;
+        } else if(chance > 0.5){
+          chance = 0.5;
+        }
+
+        if(Math.random() <= chance) {
+          zombie.dead = false;
+          zombie.changeAnimation(2);
+        }
+      }
+    }
   }
   timer++;
+
+  if(timer % 60 === 0) {
+    for(var zombie in zombies) {
+      zombie = zombies[zombie];
+      if(zombie.dead) {
+        if(Math.random() <= 0.1) {
+          zombie.dead = false;
+          zombie.changeAnimation(2);
+          break;
+        }
+      }
+    }
+  }
 
   if(playerObject.currentAnimation == 2 && playerObject.animations[playerObject.currentAnimation].isComplete()) {
     attack = false;
@@ -98,10 +135,23 @@ function gameLoop() {
   for(var zombie in zombies) {
     zombie = zombies[zombie];
 
+    if(zombie.dead) {
+        continue;
+      }
+
+    if(zombie.currentAnimation == 2) {
+      if(zombie.animations[zombie.currentAnimation].isComplete()) {
+        zombie.changeAnimation(0);
+      }
+      continue;
+    }
+
     if(attack && collision_detect(zombie, swordCollide) && playerObject.animations[playerObject.currentAnimation].currentFrame > 10) {
       score += 100;
       $(".score").html(score);
-      zombie.y = -100;
+      zombie.changeAnimation(1);
+      zombie.dead = true;
+      continue;
     }
 
     if(collision_detect(zombie, playerObject)) {
@@ -129,7 +179,7 @@ function gameLoop() {
     var zombieCollide = false;
     for(var otherZombie in zombies) {
       otherZombie = zombies[otherZombie];
-      if(otherZombie != zombie && collision_detect(zombie, otherZombie)) {
+      if(otherZombie != zombie && !otherZombie.dead && collision_detect(zombie, otherZombie)) {
         zombieCollide = otherZombie;
         break;
       }
@@ -264,13 +314,12 @@ $(function() {
 
 
   var testObject3 = testScene.createObject();
-  testObject3.z = -4.0;
   testObject3.y = -2.0;
-  testObject3.width = 500.0;
-  testObject3.depth = 500.0;
-  testObject3.boundWidth = 500.0;
-  testObject3.boundDepth = 500.0;
-  testObject3.color = [0.5, 0.5, 0.5];
+  testObject3.width = 20.0;
+  testObject3.depth = 40.0;
+  testObject3.boundWidth = 20.0;
+  testObject3.boundDepth = 40.0;
+  testObject3.setTexture("assets/grass.png");
 
 
   runningLoop = setInterval(gameLoop, 1000 / 60);
