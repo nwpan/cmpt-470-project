@@ -1,0 +1,15 @@
+cmpt-470-devnull-tech-eval
+==========================
+
+Tech Evaluation demo site for CMPT470 SFU Fall 2012 Group 1: /dev/null/
+
+### Starcraft Cheat-Code
+To get 1000 credits, please replace `[user id]`, with your respective user id in the URL below and press enter:
+`http://cmpt470.csil.sfu.ca:8001/users/[user id]/showmethemoney`
+
+This little easter-egg is primarily for the course instructor to quickly obtain credits for use in the store.
+
+==========================
+Items have type Colour, Hat, Tops, Bottoms and Shoes. Only Colour and Hat items are available to use. 
+
+The default Avatar has a red Top, blue Bottoms and green Shoes. The Colour items bought from the Store are used to change these colours. 
