@@ -8,3 +8,6 @@ To get 1000 credits, please replace `[user id]`, with your respective user id in
 `http://cmpt470.csil.sfu.ca:8001/users/[user id]/showmethemoney`
 
 This little easter-egg is primarily for the course instructor to quickly obtain credits for use in the store.
+
+==========================
+Items have type Colour, Hat, Tops, Bottoms and Shoes. Only Colour and Hat items are available to use. 
