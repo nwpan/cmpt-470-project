@@ -16,6 +16,7 @@ var life = 3;
 var runningLoop;
 var renderer;
 var dirty = false;
+
 function reset() {
   score = 0;
   difficulty = 0;
@@ -33,9 +34,8 @@ function reset() {
   obstacleModel.boundWidth = 3.0;
   obstacleModel.color = [1.0, 1.0, 0.6];
   obstacleModel.setTexture("assets/crate.jpg");
-
   obstacles.push(obstacleModel);
-  projectileObstacles = {};
+
   projectileModel = scene.createObject();
   projectileModel.width = 1.5;
   projectileModel.boundWidth = 3.0;
@@ -45,13 +45,7 @@ function reset() {
   projectileModel.loadModelFromAjax("bullet");
   projectileObstacles.push(projectileModel);
   scene.objects.push(obstacleModel);
-  /*
-  var run = playerObject.createAnimation();
-  for(var i = 1; i <= 13; i++ ) {
-    run.addFrameFromJson("/run/charrun" + i.toString(), "assets/char.jpg");
-  }
-  run.speed = 0.5;
-  */
+
   for (var i = 0; i < 10; i++)
   {
     starModel = scene.createObject();
@@ -61,7 +55,7 @@ function reset() {
     starModel.z = -4;
     starModel.y = Math.floor(Math.random()*100)+1;
     starModel.color = [1.0, 1.0, 0.6];
-    starModel.loadModelFromJson("star");
+    starModel.loadModelFromAjax("star");
     stars.push(starModel);
     scene.objects.push(starModel);
   }
@@ -75,7 +69,7 @@ function reset() {
     projectileModel.boundHeight = 1;
     projectileModel.height = 1;
     projectileModel.color = [1.0, 1.0, 0.6];
-    projectileModel.loadModelFromJson("bullet");
+    projectileModel.loadModelFromAjax("bullet");
     projectileObstacles.push(projectileModel);
     scene.objects.push(projectileModel);
   }
@@ -198,8 +192,9 @@ var cnt = 0;
 $(function() {
 
   $("#play-again").click(function(ev) {
+    console.log('play again');
     reset();
-    runningLoop = setInterval(gameLoop, 1000 / 60);
+    runningLoop = setInterval(gameLoop, 1000 / 10);
     renderer.render();
     $("#canvas").show();
     $("#game-over").addClass("hidden");

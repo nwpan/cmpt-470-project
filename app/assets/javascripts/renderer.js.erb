@@ -63,10 +63,17 @@ function Animation (start, end) {
   this.loop = true;
 }
 
+Animation.prototype.isComplete = function() {
+  if(!this.loop && this.end - this.start <= this.currentFrame) {
+    return true;
+  }
+  return false;
+};
+
 Animation.prototype.getFrame = function() {
   var frame = this.start + this.currentFrame;
   this.currentFrame += this.speed;
-  if(this.currentFrame > this.end) {
+  if(this.currentFrame > this.end - this.start) {
     if(this.loop) {
       this.currentFrame = 0;
     } else {
@@ -439,6 +446,7 @@ function Renderer(canvas) {
   this.canvas = canvas;
   this.canvas.width = $("body").width();
   this.canvas.height = window.innerHeight - $(".navbar").height();
+  $("html").css("overflow", "hidden");
 
   this.gl = tdl.webgl.setupWebGL(this.canvas);
   if (!this.gl) {

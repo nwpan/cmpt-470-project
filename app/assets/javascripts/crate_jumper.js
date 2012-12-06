@@ -179,7 +179,7 @@ $(function() {
       [0.0, 0.0, -4.0],
       [0.0, 1.0, 0.0]);
 
-  var run = new Animation(4, 50);
+  var run = new Animation(4, 54);
   var jump = new Animation(60, 100);
   jump.loop = false;
   jump.speed = 0.8;
@@ -193,7 +193,6 @@ $(function() {
   playerObject.boundHeight = 1.3;
   playerObject.animations.push(run);
   playerObject.animations.push(jump);
-  playerObject.loadPropFromAjax("sword", "hand_r");
 
 
   var testObject3 = testScene.createObject();

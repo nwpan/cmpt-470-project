@@ -1,0 +1,139 @@
+</div>
+</div>
+<div id="status" class="hidden">Score: <span class="score">0</span></div>
+<div id="loading" class="hero-unit"><h1>Zombie Slasher</h1>
+	<p>Controls: Arrow keys to move, space to slash!</p>
+	<p><strong>Loading...</strong><p/>
+</div>
+<div id="game-over" class="hero-unit hidden">
+	<h1>Game Over!</h1>
+	<p>Score: <span class="score">0</span></p>
+	<a id="play-again" class="btn btn-primary btn-large">
+      Play Again!
+    </a>
+</div>
+<canvas id="canvas"></canvas>
+
+<div class="container">
+<!-- Scripts go here -->
+<!-- Shaders -->
+<script id="vertex-shader" type="x-shader/x-vertex">
+	attribute vec3 position;
+	attribute vec3 normal;
+	attribute vec2 texCoord;
+	attribute vec4 skinJoints;
+	attribute vec4 skinWeights;
+
+	uniform mat4 transform;
+	uniform mat4 mvp;
+	uniform mat4 bonePosition;
+	uniform mat4 offset;
+	uniform mat4 transformInv;
+	uniform vec3 color;
+
+	uniform bool hasSkeleton;
+	uniform bool linked;
+
+	uniform mat4 bones[64];
+
+	varying vec3 v_normal;
+	varying vec3 v_position;
+	varying vec2 v_texCoord;
+	varying vec3 v_color;
+
+	void main() {
+		v_texCoord = texCoord;
+    	v_color = color;
+    	vec4 vertPosition;
+
+    	if(hasSkeleton) {
+    		mat4 skinningMat;
+    		if(linked) {
+    			skinningMat =   bonePosition * offset;
+    		} else {
+		    	skinningMat = skinWeights.x * bones[int(skinJoints.x)];
+		    	skinningMat += skinWeights.y * bones[int(skinJoints.y)];
+		    	skinningMat += skinWeights.z * bones[int(skinJoints.z)];
+		    	skinningMat += skinWeights.w * bones[int(skinJoints.w)];
+		    }
+
+	    	v_normal = normalize(vec3(transformInv * (skinningMat * vec4(normal, 0.0))));
+	    	vertPosition = mvp * (skinningMat * vec4(position, 1));
+	    } else {
+	    	v_normal = normalize(vec3(transformInv * vec4(normal, 0.0)));
+	    	vertPosition = mvp * vec4(position, 1);
+	    }
+
+    	v_position = vec3(vertPosition);
+		gl_Position = vertPosition;
+	}
+</script>
+<script id="fragment-shader" type="x-shader/x-fragment">
+	precision mediump float;
+
+	uniform sampler2D diffuseSampler;
+	uniform bool colorize;
+	uniform vec3 color1;
+	uniform vec3 color2;
+	uniform vec3 color3;
+
+
+	varying vec3 v_normal;
+	varying vec3 v_position;
+	varying vec2 v_texCoord;
+	varying vec3 v_color;
+	
+	struct lightSource
+	{
+	    vec4 position;
+	    vec4 diffuse;
+	};
+
+	lightSource light0 = lightSource(
+	         vec4(10.0, 10.0, 4.0, 0.0),
+	         vec4(1.0, 1.0, 1.0, 1.0)
+	         );
+
+
+	void main(void) {
+		vec3 texture = vec3(texture2D(diffuseSampler, v_texCoord));
+		vec3 color;
+
+		if(colorize) {
+			if(texture.x > texture.y*1.1 && texture.x > texture.z*1.1) {
+				color = vec3(texture.x) * color1;
+			} else if(texture.y > texture.x*1.1 && texture.y > texture.z*1.1) {
+				color = vec3(texture.y) * color2;
+			} else if(texture.z > texture.x*1.1 && texture.z > texture.y*1.1) {
+				color = vec3(texture.z) * color3;
+			} else {
+				color = vec3(texture.x) * vec3(1.0, 0.9, 0.8);
+			}
+		} else {
+			color = texture * v_color;
+		}
+
+	    vec3 normalDirection = normalize(v_normal);
+	    vec3 lightDirection = normalize(vec3(light0.position));
+	    vec3 diffuseReflection
+	    = vec3(light0.diffuse) * vec3(color)
+	    * max(0.0, dot(normalDirection, lightDirection));
+	    
+	    gl_FragColor = vec4(diffuseReflection, 1.0);
+	    
+	}
+</script>
+<%= javascript_include_tag("tdl/base") %>
+<%= javascript_include_tag("tdl/string") %>
+<%= javascript_include_tag("tdl/log") %>
+<%= javascript_include_tag("tdl/misc") %>
+<%= javascript_include_tag("tdl/webgl") %>
+<%= javascript_include_tag("tdl/buffers") %>
+<%= javascript_include_tag("tdl/fast") %>
+<%= javascript_include_tag("tdl/programs") %>
+<%= javascript_include_tag("tdl/models") %>
+<%= javascript_include_tag("tdl/math") %>
+<%= javascript_include_tag("tdl/textures") %>
+<%= javascript_include_tag("tdl/primitives") %>
+<%= javascript_include_tag("renderer") %>
+<%= javascript_include_tag("zombie_slasher") %>

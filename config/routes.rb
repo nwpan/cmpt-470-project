@@ -14,6 +14,8 @@ App::Application.routes.draw do
 
   resources :space_shooter_game, :only => [:index]
 
+  resources :zombie_slasher_game, :only => [:index]
+
   resources :about, :only => [:index]
 
   resources :tech_eval, :only => [:index]
