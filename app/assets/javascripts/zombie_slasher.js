@@ -7,6 +7,7 @@ var score = 0;
 var life = 3;
 var runningLoop;
 var renderer;
+var zombie;
 
 function reset() {
   score = 0;
@@ -53,6 +54,23 @@ function gameLoop() {
     playerObject.changeAnimation(0);
   }
 
+  if(zombie.x < playerObject.x*1.2) {
+    zombie.rotateY = 90;
+    zombie.x += 0.01;
+  }
+  if(zombie.x > playerObject.x*1.2) {
+    zombie.rotateY = -90;
+    zombie.x -= 0.01;
+  }
+  if(zombie.z < playerObject.z*1.2) {
+    zombie.rotateY = 0;
+    zombie.z += 0.01;
+  }
+  if(zombie.z > playerObject.z*1.2) {
+    zombie.rotateY = 180;
+    zombie.z -= 0.01;
+  }
+
 }
 
 $(function() {
@@ -71,25 +89,25 @@ $(function() {
       if (e.keyCode == 37) { //left
           playerObject.rotateY = 180;
           if(playerObject.z > -12) {
-            playerObject.z--;
+            playerObject.z-= 0.7;
           }
       }
       if (e.keyCode == 39) { //right
           playerObject.rotateY = 0;
           if(playerObject.z < 12) {
-            playerObject.z++;
+            playerObject.z+= 0.7;
           }
       }
       if (e.keyCode == 40) { //down
           playerObject.rotateY = -90;
           if(playerObject.x > -6) {
-            playerObject.x--;
+            playerObject.x-= 0.7;
           }
       }
       if (e.keyCode == 38) { //up
           playerObject.rotateY = 90;
           if(playerObject.x < 7) {
-            playerObject.x++;
+            playerObject.x+= 0.7;
           }
       }
       if (e.keyCode == 37 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 38) { 
@@ -122,8 +140,11 @@ $(function() {
 
   var idle = new Animation(109, 160);
   var run = new Animation(162, 211);
+  run.speed = 0.7;
   var slash = new Animation(214, 245);
   slash.loop = false;
+  var zombieRun = new Animation(252, 351);
+  zombieRun.speed = 0.8;
   
 
   playerObject = testScene.createAvatar($('#user_id').val());
@@ -131,7 +152,14 @@ $(function() {
   playerObject.animations.push(idle);
   playerObject.animations.push(run);
   playerObject.animations.push(slash);
+  //playerObject.skinColor = [0.7, 1.0, 0.5];
   playerObject.loadPropFromAjax("sword", "hand_r");
+
+  zombie = testScene.createAvatar($('#user_id').val());
+  zombie.boundHeight = 1.3;
+  zombie.animations.push(zombieRun);
+  zombie.skinColor = [0.7, 1.0, 0.5];
+
 
 
   var testObject3 = testScene.createObject();

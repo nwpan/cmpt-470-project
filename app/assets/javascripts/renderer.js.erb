@@ -394,6 +394,7 @@ GameObject.prototype.draw = function(view, projection) {
     var color1 = [1.0, 0.0, 0.0];
     var color2 = [0.0, 0.0, 1.0];
     var color3 = [0.0, 1.0, 0.0];
+    var skinColor = [1.0, 0.9, 0.8];
 
     if(typeof this.color1 != "undefined") {
       color1 = this.color1;
@@ -406,8 +407,12 @@ GameObject.prototype.draw = function(view, projection) {
     if(typeof this.color3 != "undefined") {
       color3 = this.color3;
     }
+
+    if(typeof this.skinColor != "undefined") {
+      skinColor = this.skinColor;
+    }
     
-    this.model.draw({"transform": this.transform, "transformInv": transformInv, "color1": color1, "color2": color2, "color3": color3, "mvp": mvp, "colorize": true, "hasSkeleton" : true, "linked" : false, "bones": bones});
+    this.model.draw({"transform": this.transform, "transformInv": transformInv, "color1": color1, "color2": color2, "color3": color3, "skinColor": skinColor, "mvp": mvp, "colorize": true, "hasSkeleton" : true, "linked" : false, "bones": bones});
     for(var linked in this.linked) {
       var bonePosition = new Float32Array(this.getBoneTransform(currentFrame, parseInt(linked)));
       tdl.fast.transpose4(bonePosition, bonePosition);
