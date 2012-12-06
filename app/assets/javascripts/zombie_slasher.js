@@ -19,28 +19,57 @@ function reset() {
 }
 
 var generateZombie = function() {
-  var zombie = testScene.createAvatar($('#user_id').val());
-  if(Math.random() > 0.5) {
+  if(zombies.length < 30) {
+    var zombie = testScene.createAvatar($('#user_id').val());
     if(Math.random() > 0.5) {
-      zombie.x = 15;
-    }else {
-      zombie.x = -15;
+      if(Math.random() > 0.5) {
+        zombie.x = 15;
+      }else {
+        zombie.x = -15;
+      }
+      zombie.z = Math.random()*14 - 7;
+    } else {
+      zombie.x = Math.random()*30 - 15;
+      if(Math.random() > 0.5) {
+        zombie.z = 12;
+      }else {
+        zombie.z = -12;
+      }
     }
-    zombie.z = Math.random()*14 - 7;
+    zombie.boundHeight = 1.3;
+    var zombieRun = new Animation(252, 351);
+    zombieRun.speed = 0.8;
+    zombie.animations.push(zombieRun);
+    zombie.skinColor = [0.7, 1.0, 0.5];
+    zombies.push(zombie);
   } else {
-    zombie.x = Math.random()*30 - 15;
-    if(Math.random() > 0.5) {
-      zombie.z = 12;
-    }else {
-      zombie.z = -12;
-    }
+    var deadZombie;
+      for(var zombie in zombies) {
+        zombie = zombies[zombie];
+        if(zombie.y < 0) {
+          deadZombie = zombie;
+          break;
+        }
+      }
+      if(typeof deadZombie != "undefined") {
+        if(Math.random() > 0.5) {
+          if(Math.random() > 0.5) {
+            zombie.x = 15;
+          }else {
+            zombie.x = -15;
+          }
+          zombie.z = Math.random()*14 - 7;
+        } else {
+          zombie.x = Math.random()*30 - 15;
+          if(Math.random() > 0.5) {
+            zombie.z = 12;
+          }else {
+            zombie.z = -12;
+          }
+        }
+        zombie.y=0;
+      }
   }
-  zombie.boundHeight = 1.3;
-  var zombieRun = new Animation(252, 351);
-  zombieRun.speed = 0.8;
-  zombie.animations.push(zombieRun);
-  zombie.skinColor = [0.7, 1.0, 0.5];
-  zombies.push(zombie);
 };
 
 var collision_detect = function(obj1, obj2) {
@@ -57,9 +86,7 @@ var collision_detect = function(obj1, obj2) {
 function gameLoop() {
 	//game logic here
   if(timer % 600 === 0) {
-    if(zombies.length < 30) {
       generateZombie();
-    }
   }
   timer++;
 
