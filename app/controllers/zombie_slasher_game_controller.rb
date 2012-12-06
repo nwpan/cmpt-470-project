@@ -3,5 +3,6 @@ class ZombieSlasherGameController < ApplicationController
     if !signed_in?
         render :layout => "application_login"
     end
+    @users = User.select("id").to_json
   end
 end

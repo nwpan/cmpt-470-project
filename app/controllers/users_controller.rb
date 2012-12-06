@@ -40,13 +40,13 @@ class UsersController < ApplicationController
                 json["hat"] = @user_hat.model_name
               end
               if(@user_colour1)
-                json["colour1"] = [ @user_colour1.red/255, @user_colour1.green/255, @user_colour1.blue/255 ]
+                json["colour1"] = [ @user_colour1.red/255.0, @user_colour1.green/255.0, @user_colour1.blue/255.0 ]
               end
               if(@user_colour2)
-                json["colour2"] = [ @user_colour2.red/255, @user_colour2.green/255, @user_colour2.blue/255 ]
+                json["colour2"] = [ @user_colour2.red/255.0, @user_colour2.green/255.0, @user_colour2.blue/255.0 ]
               end
               if(@user_colour3)
-                json["colour3"] = [ @user_colour3.red/255, @user_colour3.green/255, @user_colour3.blue/255 ]
+                json["colour3"] = [ @user_colour3.red/255.0, @user_colour3.green/255.0, @user_colour3.blue/255.0 ]
               end
               
               render :json => json.to_json

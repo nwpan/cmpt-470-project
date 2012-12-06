@@ -1,68 +1,42 @@
-var scene;
-var playerObject;
-var obstacleModel;
-var obstacles =[];
+$(function() {
+  var scene;
+  var playerObject;
+  var obstacleModel;
+  var obstacles =[];
 
-var projectileModel;
-var projectileObstacles =[];
+  var projectileModel;
+  var projectileObstacles =[];
 
-var starModel;
-var stars = [];
+  var starModel;
+  var stars = [];
 
-var jumping  = false;
-var score = 0;
-var difficulty = 0;
-var life = 3;
-var runningLoop;
-var renderer;
-var dirty = false;
+  var jumping  = false;
+  var score = 0;
+  var difficulty = 0;
+  var life = 3;
+  var runningLoop;
+  var renderer;
+  var dirty = false;
 
-function reset() {
-  score = 0;
-  difficulty = 0;
-  playerObject.x = -8;
-  playerObject.y = 2.0;
-  scene.objects = [scene.objects[0], scene.objects[1]];
-  obstacles = [];
-  stars = [];
-  projectileObstacles = [];
+  function reset() {
+    score = 0;
+    difficulty = 0;
+    playerObject.x = -8;
+    playerObject.y = 2.0;
+    scene.objects = [scene.objects[0], scene.objects[1]];
+    obstacles = [];
+    stars = [];
+    projectileObstacles = [];
 
-  obstacleModel = scene.createObject();
-  obstacleModel.y =  Math.floor(Math.random()*11);
-  obstacleModel.x = 300.0;
-  obstacleModel.width = 2.0;
-  obstacleModel.boundWidth = 3.0;
-  obstacleModel.color = [1.0, 1.0, 0.6];
-  obstacleModel.setTexture("assets/crate.jpg");
-  obstacles.push(obstacleModel);
+    obstacleModel = scene.createObject();
+    obstacleModel.y =  Math.floor(Math.random()*11);
+    obstacleModel.x = 300.0;
+    obstacleModel.width = 2.0;
+    obstacleModel.boundWidth = 3.0;
+    obstacleModel.color = [1.0, 1.0, 0.6];
+    obstacleModel.setTexture("assets/crate.jpg");
+    obstacles.push(obstacleModel);
 
-  projectileModel = scene.createObject();
-  projectileModel.width = 1.5;
-  projectileModel.boundWidth = 3.0;
-  projectileModel.boundHeight = 1;
-  projectileModel.height = 1;
-  projectileModel.color = [1.0, 1.0, 0.6];
-  projectileModel.loadModelFromAjax("bullet");
-  projectileObstacles.push(projectileModel);
-  scene.objects.push(obstacleModel);
-
-  for (var i = 0; i < 10; i++)
-  {
-    starModel = scene.createObject();
-    starModel.width = 1.5;
-    starModel.height = 1.5;
-    starModel.x = Math.floor(Math.random()*100)+50;
-    starModel.z = -4;
-    starModel.y = Math.floor(Math.random()*100)+1;
-    starModel.color = [1.0, 1.0, 0.6];
-    starModel.loadModelFromAjax("star");
-    stars.push(starModel);
-    scene.objects.push(starModel);
-  }
-
-
-  for (var i = 0; i < 10; i++)
-  {
     projectileModel = scene.createObject();
     projectileModel.width = 1.5;
     projectileModel.boundWidth = 3.0;
@@ -71,125 +45,152 @@ function reset() {
     projectileModel.color = [1.0, 1.0, 0.6];
     projectileModel.loadModelFromAjax("bullet");
     projectileObstacles.push(projectileModel);
-    scene.objects.push(projectileModel);
-  }
-}
-var collision_detect = function(obj1, obj2) {
-	
-    var hHit = false;
-    var vHit = false;
+    scene.objects.push(obstacleModel);
 
-	distx1 = (obj1.x + obj1.boundWidth);
-	disty1 = (Math.abs(obj1.y) + obj1.boundHeight/2);
-	distx2 = (obj2.x + obj2.boundWidth);
-	disty2 = (Math.abs(obj2.y) + obj2.boundHeight/2);
-	
-	if (obj1.x <= distx2 && obj2.x <= distx1){
-		hHit = true;
-	}	
-	if (Math.abs(obj1.y) <= disty2 && Math.abs(obj2.y) <= disty1){
-		vHit = true;
-	}
+    for (var i = 0; i < 10; i++)
+    {
+      starModel = scene.createObject();
+      starModel.width = 1.5;
+      starModel.height = 1.5;
+      starModel.x = Math.floor(Math.random()*100)+50;
+      starModel.z = -4;
+      starModel.y = Math.floor(Math.random()*100)+1;
+      starModel.color = [1.0, 1.0, 0.6];
+      starModel.loadModelFromAjax("star");
+      stars.push(starModel);
+      scene.objects.push(starModel);
+    }
 
-    if (hHit == true && vHit == true)
-        return true;
-    
-	return false;
-}
 
-function gameLoop() {
-	//game logic here
-
-  dirty = false;
-  difficulty+= 1;
-  $(".score").html(score);
-
-  if(difficulty % 100 == 0) {
-    if(obstacles.length < 100) {
-      obstacleModel = scene.createObject();
-      obstacleModel.y = Math.floor(Math.random()*7)+1;
-      obstacleModel.x = 100.0;
-      obstacleModel.width = 2.0;
-      obstacleModel.boundWidth = 3.0;
-      obstacleModel.color = [1.0, 1.0, 0.6];
-      obstacleModel.setTexture("assets/crate.jpg");
-      obstacles.push(obstacleModel);
+    for (var i = 0; i < 10; i++)
+    {
+      projectileModel = scene.createObject();
+      projectileModel.width = 1.5;
+      projectileModel.boundWidth = 3.0;
+      projectileModel.boundHeight = 1;
+      projectileModel.height = 1;
+      projectileModel.color = [1.0, 1.0, 0.6];
+      projectileModel.loadModelFromAjax("bullet");
+      projectileObstacles.push(projectileModel);
+      scene.objects.push(projectileModel);
     }
   }
+  var collision_detect = function(obj1, obj2) {
+  	
+      var hHit = false;
+      var vHit = false;
 
-  
-  for(var o = 0; o < projectileObstacles.length; o++) {
-    for(var i = 0; i < obstacles.length; i++) {
-      if (projectileObstacles[o].x >= 12)
-      {
-        projectileObstacles[o].y = 100;
-        projectileObstacles[o].x = 100;
-      }
-      if (collision_detect(obstacles[i], projectileObstacles[o]))
-      {
-        score += 100;
-        obstacles[i].x = -20;
-        projectileObstacles[o].y = 100;
-        projectileObstacles[o].x = 100;
-      }
-      else 
-      {
-        projectileObstacles[o].x += 1;
-      }
-    }
-  }
-
-  for(var i = 0; i < obstacles.length; i++) {
-    var playerCollision = collision_detect(playerObject, obstacles[i]);
-  	if(obstacles[i].x <= -20)
-  	{
-      obstacles[i].y = Math.floor(Math.random()*7)+1;
-  	  obstacles[i].x = 100;
+  	distx1 = (obj1.x + obj1.boundWidth);
+  	disty1 = (Math.abs(obj1.y) + obj1.boundHeight/2);
+  	distx2 = (obj2.x + obj2.boundWidth);
+  	disty2 = (Math.abs(obj2.y) + obj2.boundHeight/2);
+  	
+  	if (obj1.x <= distx2 && obj2.x <= distx1){
+  		hHit = true;
+  	}	
+  	if (Math.abs(obj1.y) <= disty2 && Math.abs(obj2.y) <= disty1){
+  		vHit = true;
   	}
 
-    if (playerCollision)
-    {
-        $.ajax({
-          type: 'POST',
-          url: '/high_scores',
-          data: {
-            high_score: score, 
-            game: "Space Shooter"
-          },
-          success: function(data)
-          {
-            
-          }
-        });
-        $("#canvas").hide();
-        $("#game-over").removeClass("hidden");
-        $("#status").addClass("hidden").hide();
-        $(".score").html(score);
-        renderer.stopRender();
-        clearInterval(runningLoop);
-        break;   
-    }
-    else if (!playerCollision)
-    {
-      obstacles[i].x -= 1;
-    }
+      if (hHit == true && vHit == true)
+          return true;
+      
+  	return false;
   }
 
-  for (var i = 0; i < 10; i++)
-  {
-    if (stars[i].x < -20)
-    {
-      stars[i].x = Math.floor(Math.random()*100)+50;
-      stars[i].y = Math.floor(Math.random()*7)+1;
+  function gameLoop() {
+  	//game logic here
+
+    dirty = false;
+    difficulty+= 1;
+    $(".score").html(score);
+
+    if(difficulty % 100 == 0) {
+      if(obstacles.length < 100) {
+        obstacleModel = scene.createObject();
+        obstacleModel.y = Math.floor(Math.random()*7)+1;
+        obstacleModel.x = 100.0;
+        obstacleModel.width = 2.0;
+        obstacleModel.boundWidth = 3.0;
+        obstacleModel.color = [1.0, 1.0, 0.6];
+        obstacleModel.setTexture("assets/crate.jpg");
+        obstacles.push(obstacleModel);
+      }
     }
-    else
+
+    
+    for(var o = 0; o < projectileObstacles.length; o++) {
+      for(var i = 0; i < obstacles.length; i++) {
+        if (projectileObstacles[o].x >= 12)
+        {
+          projectileObstacles[o].y = 100;
+          projectileObstacles[o].x = 100;
+        }
+        if (collision_detect(obstacles[i], projectileObstacles[o]))
+        {
+          score += 100;
+          obstacles[i].x = -20;
+          projectileObstacles[o].y = 100;
+          projectileObstacles[o].x = 100;
+        }
+        else 
+        {
+          projectileObstacles[o].x += 1;
+        }
+      }
+    }
+
+    for(var i = 0; i < obstacles.length; i++) {
+      var playerCollision = collision_detect(playerObject, obstacles[i]);
+    	if(obstacles[i].x <= -20)
+    	{
+        obstacles[i].y = Math.floor(Math.random()*7)+1;
+    	  obstacles[i].x = 100;
+    	}
+
+      if (playerCollision)
+      {
+          $.ajax({
+            type: 'POST',
+            url: '/high_scores',
+            data: {
+              high_score: score, 
+              game: "Space Shooter"
+            },
+            success: function(data)
+            {
+              
+            }
+          });
+          $("#canvas").hide();
+          $("#game-over").removeClass("hidden");
+          $("#status").addClass("hidden").hide();
+          $(".score").html(score);
+          renderer.stopRender();
+          clearInterval(runningLoop);
+          break;   
+      }
+      else if (!playerCollision)
+      {
+        obstacles[i].x -= 1;
+      }
+    }
+
+    for (var i = 0; i < 10; i++)
     {
-      stars[i].x -= 1;
+      if (stars[i].x < -20)
+      {
+        stars[i].x = Math.floor(Math.random()*100)+50;
+        stars[i].y = Math.floor(Math.random()*7)+1;
+      }
+      else
+      {
+        stars[i].x -= 1;
+      }
     }
   }
-}
-var cnt = 0;
-$(function() {
+  var cnt = 0;
+
 
   $("#play-again").click(function(ev) {
     console.log('play again');

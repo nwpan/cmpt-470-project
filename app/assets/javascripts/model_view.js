@@ -1,7 +1,7 @@
-var object;
 $(function() {
 	var renderer = new Renderer($("#canvas")[0]);
 	var scene = renderer.createScene();
+	var object;
 	if($('#model').attr("title") == "avatar") {
 		object = scene.createAvatar($('#user_id').val());
 	} else {
