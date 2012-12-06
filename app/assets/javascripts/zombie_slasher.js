@@ -6,7 +6,11 @@ var runningLoop;
 var renderer;
 var zombies = [];
 var timer = 0;
-var swordCollide = {x: 0, y: 0, z: 1.5, boundHeight: 1.0, boundWidth: 2.0, boundDepth: 2.0};
+var swordCollide = {x: 0, y: 0, z: 1.0, boundHeight: 1.0, boundWidth: 2.5, boundDepth: 2.5};
+var keyUp = false;
+var keyDown = false;
+var keyLeft = false;
+var keyRight = false;
 
 function reset() {
   score = 0;
@@ -65,13 +69,13 @@ var generateZombie = function() {
           }else {
             zombie.x = -15;
           }
-          zombie.z = Math.random()*14 - 7;
+          zombie.z = Math.random()*40 - 20;
         } else {
-          zombie.x = Math.random()*30 - 15;
+          zombie.x = Math.random()*40 - 20;
           if(Math.random() > 0.5) {
-            zombie.z = 12;
+            zombie.z = 25;
           }else {
-            zombie.z = -12;
+            zombie.z = -25;
           }
         }
         zombie.y=0;
@@ -98,7 +102,7 @@ function gameLoop() {
     for(var zombie in zombies) {
       zombie = zombies[zombie];
       if(zombie.dead) {
-        var chance = score / 10000;
+        var chance = score / 50000;
         if(chance < 0.01) {
           chance = 0.01;
         } else if(chance > 0.5){
@@ -114,11 +118,11 @@ function gameLoop() {
   }
   timer++;
 
-  if(timer % 60 === 0) {
+  if(timer % 120 === 0) {
     for(var zombie in zombies) {
       zombie = zombies[zombie];
       if(zombie.dead) {
-        if(Math.random() <= 0.1) {
+        if(Math.random() <= 0.05) {
           zombie.dead = false;
           zombie.changeAnimation(2);
           break;
@@ -126,6 +130,50 @@ function gameLoop() {
       }
     }
   }
+
+  if(!attack) {
+        if (keyLeft) { //left
+            playerObject.rotateY = 180;
+            if(playerObject.z > -18) {
+              playerObject.z-= 0.12;
+            }
+            swordCollide.x = playerObject.x;
+            swordCollide.z = playerObject.z - 1.0;
+        }
+        if (keyRight) { //right
+            playerObject.rotateY = 0;
+            if(playerObject.z < 18) {
+              playerObject.z+= 0.12;
+            }
+            swordCollide.x = playerObject.x;
+            swordCollide.z = playerObject.z + 1.0;
+        }
+        if (keyDown) { //down
+            playerObject.rotateY = -90;
+            if(playerObject.x > -10) {
+              playerObject.x-= 0.12;
+            }
+            swordCollide.x = playerObject.x - 1.0;
+            swordCollide.z = playerObject.z;
+        }
+        if (keyUp) { //up
+            playerObject.rotateY = 90;
+            if(playerObject.x < 10) {
+              playerObject.x+= 0.12;
+            }
+            swordCollide.x = playerObject.x + 1.0;
+            swordCollide.z = playerObject.z;
+        }
+        if (keyUp || keyDown || keyLeft || keyRight) {
+          if(playerObject.currentAnimation != 1) {
+            playerObject.changeAnimation(1);
+          }
+        } else {
+          if(playerObject.currentAnimation !== 0) {
+            playerObject.changeAnimation(0);
+          }
+        }
+      }
 
   if(playerObject.currentAnimation == 2 && playerObject.animations[playerObject.currentAnimation].isComplete()) {
     attack = false;
@@ -234,45 +282,21 @@ $(function() {
   $(document).keydown(function(e){
       if(!attack) {
         if (e.keyCode == 37) { //left
-            playerObject.rotateY = 180;
-            if(playerObject.z > -12) {
-              playerObject.z-= 0.7;
-            }
-            swordCollide.x = playerObject.x;
-            swordCollide.z = playerObject.z - 1.5;
+            keyLeft = true;
         }
         if (e.keyCode == 39) { //right
-            playerObject.rotateY = 0;
-            if(playerObject.z < 12) {
-              playerObject.z+= 0.7;
-            }
-            swordCollide.x = playerObject.x;
-            swordCollide.z = playerObject.z + 1.5;
+            keyRight = true;
         }
         if (e.keyCode == 40) { //down
-            playerObject.rotateY = -90;
-            if(playerObject.x > -6) {
-              playerObject.x-= 0.7;
-            }
-            swordCollide.x = playerObject.x - 1.5;
-            swordCollide.z = playerObject.z;
+            keyDown = true;
         }
         if (e.keyCode == 38) { //up
-            playerObject.rotateY = 90;
-            if(playerObject.x < 7) {
-              playerObject.x+= 0.7;
-            }
-            swordCollide.x = playerObject.x + 1.5;
-            swordCollide.z = playerObject.z;
-        }
-        if (e.keyCode == 37 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 38) { 
-          if(playerObject.currentAnimation != 1) {
-            playerObject.changeAnimation(1);
-          }
+            keyUp = true;
         }
 
         if (e.keyCode == 32) { //space
             attack = true;
+            keyUp = keyDown = keyLeft = keyRight = false;
             playerObject.changeAnimation(2);
         }
       }
@@ -280,9 +304,18 @@ $(function() {
 
   $(document).keyup(function(e){
     if(!attack) {
-      if (e.keyCode == 37 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 38) { 
-        playerObject.changeAnimation(0);
-      }
+      if (e.keyCode == 37) { //left
+            keyLeft = false;
+        }
+        if (e.keyCode == 39) { //right
+            keyRight = false;
+        }
+        if (e.keyCode == 40) { //down
+            keyDown = false;
+        }
+        if (e.keyCode == 38) { //up
+            keyUp = false;
+        }
     }
   });
   
@@ -293,15 +326,14 @@ $(function() {
 
   testScene = renderer.createScene();
 
-  testScene.camera([-2.0, 10.0, 0.0],
+  testScene.camera([-4.0, 15.0, 0.0],
       [0.0, 0.0, 0.0],
       [0.0, 1.0, 0.0]);
 
   var idle = new Animation(109, 160);
   var run = new Animation(162, 211);
-  run.speed = 0.7;
   var slash = new Animation(220, 245);
-  slash.speed = 1.1;
+  slash.speed = 1.2;
   slash.loop = false;
   
 
@@ -315,10 +347,8 @@ $(function() {
 
   var testObject3 = testScene.createObject();
   testObject3.y = -2.0;
-  testObject3.width = 20.0;
-  testObject3.depth = 40.0;
-  testObject3.boundWidth = 20.0;
-  testObject3.boundDepth = 40.0;
+  testObject3.width = 40.0;
+  testObject3.depth = 48.0;
   testObject3.setTexture("assets/grass.png");
 
 
