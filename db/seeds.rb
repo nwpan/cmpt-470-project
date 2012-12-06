@@ -18,7 +18,7 @@ Item.create :name => "SFU Hat", :item_type => "Hat", :price => 6000, :descriptio
 Item.create :name => "Red", :item_type => "Colour", :price => 500, :description => "", :red => 255, :green => 0, :blue => 0
 Item.create :name => "Green", :item_type => "Colour", :price => 500, :description => "", :red => 0, :green => 255, :blue => 0
 Item.create :name => "Blue", :item_type => "Colour", :price => 500, :description => "", :red => 0, :green => 0, :blue => 255
-Item.create :name => "Orange", :item_type => "Colour", :price => 500, :description => "", :red => 255, :green => 69, :blue => 0
+Item.create :name => "Orange", :item_type => "Colour", :price => 500, :description => "", :red => 255, :green => 153, :blue => 18
 Item.create :name => "Yellow", :item_type => "Colour", :price => 500, :description => "", :red => 255, :green => 255, :blue => 0
 Item.create :name => "Purple", :item_type => "Colour", :price => 500, :description => "", :red => 160, :green => 32, :blue => 240
 Item.create :name => "Brown", :item_type => "Colour", :price => 500, :description => "", :red => 139, :green => 69, :blue => 19

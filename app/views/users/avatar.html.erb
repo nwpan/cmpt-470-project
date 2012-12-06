@@ -40,7 +40,7 @@
 
 <h4>Items</h4>
 
-<% if @user_items.empty? %>
+<% if @user_not_colours.empty? %>
    No items in inventory.
 
 <% else %>
@@ -51,8 +51,7 @@
     <th>Type</th>
     <th>Options</th>
   	</tr>
-<% @user_items.each do |item| %>
-<% if item.item_type != "Colour" %>
+<% @user_not_colours.each do |item| %>
 	<tr>
 		<td>
 		   <div class = "image">
@@ -74,10 +73,9 @@
 		    <% end %></td>
 	</tr>
 <% end %>
-<% end %>
 </table>
 <% end %>
 
 <div id = "pagination">
-   <%= paginate @user_items %>
+   <%= paginate @user_not_colours %>
 </div>
