@@ -2,6 +2,7 @@
 
 <iframe src = "/model_handler/show.html?model=avatar" width = 400 height = 400 scrolling = "no" frameBorder="0">Browser not compatible.</iframe>
 
+<% if @user.id == current_user.id %>
 <table class = "colours" style="display:inline-block">
    <tr>
 	<td>Top Colour:</td>
@@ -74,6 +75,7 @@
 	</tr>
 <% end %>
 </table>
+<% end %>
 <% end %>
 
 <div id = "pagination">

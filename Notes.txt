@@ -11,3 +11,5 @@ This little easter-egg is primarily for the course instructor to quickly obtain 
 
 ==========================
 Items have type Colour, Hat, Tops, Bottoms and Shoes. Only Colour and Hat items are available to use. 
+
+The default Avatar has a red Top, blue Bottoms and green Shoes. The Colour items bought from the Store are used to change these colours. 
