@@ -56,6 +56,34 @@
 
 <br />
 
+<%= link_to image_tag("zombieslasher.jpg"), :zombie_slasher_game_index %>
+
+<% if @zombie_slasher_high_scores.empty? %>
+   <br />
+   No scores to show.
+   <br /><br />
+<% else %>
+
+<table class = "table">
+  <tr>
+    <th>Name</th>
+    <th>Game</th>
+    <th>Score</th>
+  </tr>
+
+<% @zombie_slasher_high_scores.each do |high_score| %>
+  <tr>
+    <td><%= high_score.first_name %></td>
+    <td><%= high_score.game %></td>
+    <td><%= high_score.score %></td>
+  </tr>
+<% end %>
+</table>
+
+<% end %>
+
+<br />
+
 <h1>My Scores</h1>
 
 <% if @my_high_scores.empty? %>
