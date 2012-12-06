@@ -30,7 +30,7 @@ CREATE TABLE `high_scores` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,6 @@ CREATE TABLE `high_scores` (
 
 LOCK TABLES `high_scores` WRITE;
 /*!40000 ALTER TABLE `high_scores` DISABLE KEYS */;
-INSERT INTO `high_scores` VALUES (1,2,'Crate Jumper',1905,'2012-12-05 23:27:51','2012-12-05 23:27:51'),(2,1,'Space Shooter',4200,'2012-12-06 00:30:14','2012-12-06 00:30:14');
 /*!40000 ALTER TABLE `high_scores` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,7 +56,7 @@ CREATE TABLE `inventories` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,7 +65,6 @@ CREATE TABLE `inventories` (
 
 LOCK TABLES `inventories` WRITE;
 /*!40000 ALTER TABLE `inventories` DISABLE KEYS */;
-INSERT INTO `inventories` VALUES (3,2,10,'2012-12-05 23:28:44','2012-12-05 23:28:44'),(4,2,11,'2012-12-05 23:33:52','2012-12-05 23:33:52'),(5,2,9,'2012-12-05 23:34:41','2012-12-05 23:34:41'),(7,2,8,'2012-12-05 23:35:37','2012-12-05 23:35:37'),(8,2,14,'2012-12-05 23:35:51','2012-12-05 23:35:51');
 /*!40000 ALTER TABLE `inventories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -99,7 +97,7 @@ CREATE TABLE `items` (
 
 LOCK TABLES `items` WRITE;
 /*!40000 ALTER TABLE `items` DISABLE KEYS */;
-INSERT INTO `items` VALUES (1,'Santa Hat','Hat',5000,'santa-hat','Ho ho ho!','2012-12-05 23:09:59','2012-12-05 23:09:59',0,0,0),(2,'Simple Hat','Hat',500,'simple-hat','Just a simple hat to hide your messy hair.','2012-12-05 23:09:59','2012-12-05 23:09:59',0,0,0),(3,'Birthday Hat','Hat',2500,'birthday-hat','Happy birthday!','2012-12-05 23:09:59','2012-12-05 23:09:59',0,0,0),(4,'College Hat','Hat',1750,'college-hat','Look smart with this college hat.','2012-12-05 23:09:59','2012-12-05 23:09:59',0,0,0),(5,'Wide-Brimmed Hat','Hat',3000,'wide-brimmed-hat','Keep the sun out of your eyes.','2012-12-05 23:09:59','2012-12-05 23:09:59',0,0,0),(6,'SFU Hat','Hat',6000,'sfu-hat','Show off your school pride.','2012-12-05 23:09:59','2012-12-05 23:09:59',0,0,0),(7,'Red','Colour',500,NULL,'','2012-12-05 23:09:59','2012-12-05 23:09:59',255,0,0),(8,'Green','Colour',500,NULL,'','2012-12-05 23:09:59','2012-12-05 23:09:59',0,255,0),(9,'Blue','Colour',500,NULL,'','2012-12-05 23:09:59','2012-12-05 23:09:59',0,0,255),(10,'Orange','Colour',500,NULL,'','2012-12-05 23:09:59','2012-12-05 23:09:59',255,69,0),(11,'Yellow','Colour',500,NULL,'','2012-12-05 23:09:59','2012-12-05 23:09:59',255,255,0),(12,'Purple','Colour',500,NULL,'','2012-12-05 23:09:59','2012-12-05 23:09:59',160,32,240),(13,'Brown','Colour',500,NULL,'','2012-12-05 23:09:59','2012-12-05 23:09:59',139,69,19),(14,'Black','Colour',500,NULL,'','2012-12-05 23:09:59','2012-12-05 23:09:59',0,0,0),(15,'White','Colour',500,NULL,'','2012-12-05 23:09:59','2012-12-05 23:09:59',255,255,255);
+INSERT INTO `items` VALUES (1,'Santa Hat','Hat',5000,'santa-hat','Ho ho ho!','2012-12-06 07:37:48','2012-12-06 07:37:48',0,0,0),(2,'Simple Hat','Hat',500,'simple-hat','Just a simple hat to hide your messy hair.','2012-12-06 07:37:48','2012-12-06 07:37:48',0,0,0),(3,'Birthday Hat','Hat',2500,'birthday-hat','Happy birthday!','2012-12-06 07:37:48','2012-12-06 07:37:48',0,0,0),(4,'College Hat','Hat',1750,'college-hat','Look smart with this college hat.','2012-12-06 07:37:48','2012-12-06 07:37:48',0,0,0),(5,'Wide-Brimmed Hat','Hat',3000,'wide-brimmed-hat','Keep the sun out of your eyes.','2012-12-06 07:37:48','2012-12-06 07:37:48',0,0,0),(6,'SFU Hat','Hat',6000,'sfu-hat','Show off your school pride.','2012-12-06 07:37:48','2012-12-06 07:37:48',0,0,0),(7,'Red','Colour',500,NULL,'','2012-12-06 07:37:48','2012-12-06 07:37:48',255,0,0),(8,'Green','Colour',500,NULL,'','2012-12-06 07:37:48','2012-12-06 07:37:48',0,255,0),(9,'Blue','Colour',500,NULL,'','2012-12-06 07:37:48','2012-12-06 07:37:48',0,0,255),(10,'Orange','Colour',500,NULL,'','2012-12-06 07:37:48','2012-12-06 07:37:48',255,153,18),(11,'Yellow','Colour',500,NULL,'','2012-12-06 07:37:48','2012-12-06 07:37:48',255,255,0),(12,'Purple','Colour',500,NULL,'','2012-12-06 07:37:48','2012-12-06 07:37:48',160,32,240),(13,'Brown','Colour',500,NULL,'','2012-12-06 07:37:48','2012-12-06 07:37:48',139,69,19),(14,'Black','Colour',500,NULL,'','2012-12-06 07:37:48','2012-12-06 07:37:48',0,0,0),(15,'White','Colour',500,NULL,'','2012-12-06 07:37:48','2012-12-06 07:37:48',255,255,255);
 /*!40000 ALTER TABLE `items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +149,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   KEY `index_users_on_remember_token` (`remember_token`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,7 +158,6 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Ellen','Wong','ellenw@sfu.ca',NULL,'$2a$10$EoVqhc0jInTKT93W.K2HtOrxEZePzwhWukKrVL2FamIs8luZKU0xi','2012-12-05 23:10:16','2012-12-06 00:30:14','lBc6Avsqg91ssusdiop9DQ',42000,NULL,NULL,NULL,NULL),(2,'Test1','Ellen','ellenjswong+1@gmail.com',NULL,'$2a$10$7CfIw7sDmeGdMqVDbO7YEO9aGNPPMHm77.GSEzczosJO0s4d9EjE2','2012-12-05 23:25:19','2012-12-05 23:39:54','qlhmjeBTKX431YAYBoGUkg',8500,1,14,11,14);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -173,4 +170,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-05 16:55:46
+-- Dump completed on 2012-12-05 23:38:16
