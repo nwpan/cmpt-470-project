@@ -11,6 +11,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @user_items = @user.items.order("name ASC").page(params[:page])
     @user_colours = @user.items.where("item_type = ?", "Colour").order("name ASC")
+    @user_not_colours = @user.items.where("item_type != ?", "Colour").order("name ASC").page(params[:page])
     #Check if the colour is in the user's inventory.
     if @user.colour1? && @user_items.exists?(@user.colour1)
 	@user_colour1 = Item.find(@user.colour1)
